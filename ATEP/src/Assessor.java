@@ -5,4 +5,10 @@ public class Assessor extends User {
 		super(n);
 	}
 	
+	public void gradeQuestion(Question q, int score) {
+		q.setScore(score);
+	}
+	
+	
+	
 }
