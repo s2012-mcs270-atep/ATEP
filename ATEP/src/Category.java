@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 
 public class Category {
-	private ArrayList<Question> questions;
+	public ArrayList<Question> questions;
 //category of questions
 
 	public Category(ArrayList<Question> questions) {

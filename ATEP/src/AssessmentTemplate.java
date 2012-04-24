@@ -1,3 +1,4 @@
+import javax.swing.JCheckBox;
 import java.util.ArrayList;
 
 
@@ -17,7 +18,18 @@ public class AssessmentTemplate {
 	}
 	
 	public void loadFromTemplate(AssessmentTemplate template){
-		
+		for (Category category: categories){
+			for (Question question: category.questions){
+				final JCheckBox oneBox = new JCheckBox("1");
+				final JCheckBox twoBox = new JCheckBox("2");
+				final JCheckBox threeBox = new JCheckBox("3");
+				final JCheckBox fourBox = new JCheckBox("4");
+				final JCheckBox fiveBox = new JCheckBox("5");
+				
+				
+				
+			}
+		}
 	}
 	
 	
