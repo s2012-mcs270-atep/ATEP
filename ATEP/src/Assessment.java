@@ -10,7 +10,21 @@ public class Assessment extends AssessmentTemplate {
 		super(name, categories, classYear);
 		this.owner = owner;
 		// make a copy of appropriate assessment form for specified student owner
+	
 	}
+	
+	public String getStatus() {
+		return  "hi";
+	}
+	
+	public void setPassed() {
+		
+	}
+	
+	public void setComplete() {
+		
+	}
+	
 	
 	//methods for editing assessments go here? Or in Assessor class?
 }

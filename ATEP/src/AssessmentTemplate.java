@@ -16,4 +16,9 @@ public class AssessmentTemplate {
 		// a parameter to this constructor
 	}
 	
+	public void loadFromTemplate(AssessmentTemplate template){
+		
+	}
+	
+	
 }
