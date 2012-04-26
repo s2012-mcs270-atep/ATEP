@@ -1,0 +1,2 @@
+serviceClass: edu.gac.ATEP.client.AssessmentService
+path: 1FEE30488EAAA2987DCF15484E893A38.gwt.rpc

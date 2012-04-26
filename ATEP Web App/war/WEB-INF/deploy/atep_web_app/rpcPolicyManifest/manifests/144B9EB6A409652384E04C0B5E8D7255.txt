@@ -1,0 +1,2 @@
+serviceClass: edu.gac.ATEP.client.GreetingService
+path: 9CFE0E7EDF97DD39150B45E61C26AE66.gwt.rpc
