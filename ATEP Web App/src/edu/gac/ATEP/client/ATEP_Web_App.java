@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -40,6 +41,7 @@ public class ATEP_Web_App implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
+		final Label instructionsLabel = new Label("Please enter your name:");
 		final Button sendButton = new Button("Send");
 		final TextBox nameField = new TextBox();
 		nameField.setText("GWT User");
@@ -47,21 +49,43 @@ public class ATEP_Web_App implements EntryPoint {
 
 		// We can add style names to widgets
 		sendButton.addStyleName("sendButton");
+		errorLabel.addStyleName("error");
+		instructionsLabel.addStyleName("instructions");
+		
+		// Create some panels to hold the widgets together
+		final VerticalPanel mainPanel = new VerticalPanel();
+		final HorizontalPanel entryPanel = new HorizontalPanel();
+		
+		// Assemble the widgets into the panels
+		entryPanel.add(nameField);
+		entryPanel.add(sendButton);
+		mainPanel.add(instructionsLabel);
+		mainPanel.add(entryPanel);
+		mainPanel.add(errorLabel);
 
-		// Add the nameField and sendButton to the RootPanel
+		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
-		RootPanel rootPanel = RootPanel.get("nameFieldContainer");
-		rootPanel.add(nameField);
-		RootPanel.get("sendButtonContainer").add(sendButton, 185, 10);
-		sendButton.setSize("66px", "28px");
-		RootPanel.get("errorLabelContainer").add(errorLabel);
+		RootPanel rootPanel = RootPanel.get("applicationContainer");
+		rootPanel.add(mainPanel);
 
 		// Focus the cursor on the name field when the app loads
 		nameField.setFocus(true);
 		
-		TextButton txtbtnTestAdd = new TextButton("Test add");
-		rootPanel.add(txtbtnTestAdd, 257, 10);
+		Label lblSearchDatabase = new Label("Search Database");
+		mainPanel.add(lblSearchDatabase);
+		
+		HorizontalPanel horizontalPanel = new HorizontalPanel();
+		mainPanel.add(horizontalPanel);
+		horizontalPanel.setSize("251px", "42px");
+		
+		TextBox txtbxEnterQuery = new TextBox();
+		txtbxEnterQuery.setText("Enter Query");
+		horizontalPanel.add(txtbxEnterQuery);
+		
+		Button btnSearch = new Button("Search");
+		horizontalPanel.add(btnSearch);
 		nameField.selectAll();
+		
 
 		// Create the popup dialog box
 		final DialogBox dialogBox = new DialogBox();
