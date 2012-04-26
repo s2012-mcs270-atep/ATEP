@@ -18,7 +18,7 @@
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Test.html</welcome-file>
+    <welcome-file>ATEP.html</welcome-file>
   </welcome-file-list>
 
 </web-app>
