@@ -1,4 +1,4 @@
-package client;
+package edu.gac.ATEP.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 

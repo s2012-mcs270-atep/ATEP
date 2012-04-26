@@ -1,3 +1,4 @@
+package edu.gac.ATEP.shared;
 
 public class Question {
 	private String category; //possibly change to class instead of String

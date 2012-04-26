@@ -1,8 +1,9 @@
-package server;
+package edu.gac.ATEP.server;
 
-import client.AssessmentService;
 // import edu.gac.mcs270.ui.shared.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import edu.gac.ATEP.client.AssessmentService;
 
 /**
 * The server side implementation of the RPC service.

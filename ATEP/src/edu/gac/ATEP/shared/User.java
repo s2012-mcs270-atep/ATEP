@@ -1,3 +1,4 @@
+package edu.gac.ATEP.shared;
 
 public class User {
 	private String name; //Username or name?
