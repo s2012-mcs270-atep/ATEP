@@ -12,5 +12,11 @@ public class Student extends User {
 		classYear = cY;
 	}
 	
+	public int getClassYear() {
+		return classYear;
+	}
 	
+	public String toString() {
+		return super.toString() + " -- Year in Program: " + classYear;
+	}
 }
