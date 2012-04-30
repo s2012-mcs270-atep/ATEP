@@ -21,4 +21,8 @@ public class AssessmentTemplate {
 	public String getName() {
 		return name;
 	}
+	
+	public int getClassYear() { 
+		return classYear;
+	}
 }

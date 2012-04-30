@@ -3,14 +3,18 @@ import java.util.ArrayList;
 
 
 
-public class Assessment extends AssessmentTemplate {
+public class Assessment{
+	private String name;
 	private int status; // 0 if not started, 1 if in progress, 2 if complete
 	private Student owner;
+	private int classYear; 
 	
-	public Assessment(String name, ArrayList<Category> categories, int classYear, Student owner) {
-		super(name, categories, classYear);
+	public Assessment(AssessmentTemplate template, Student owner) {
+		name = template.getName(); 
+		classYear = template.getClassYear(); 
 		this.owner = owner;
 		status = 0;
+		// have we accounted for all info. needed to initialize an assessment? 
 		// make a copy of appropriate assessment form for specified student owner
 	
 	}
