@@ -3,8 +3,7 @@ import java.util.ArrayList;
 
 
 public class Assessment extends AssessmentTemplate {
-	private boolean isComplete;
-	private boolean isPassed;
+	private int status; // 0 if not started, 1 if in progress, 2 if complete
 	private Student owner;
 	
 	public Assessment(String name, ArrayList<Category> categories, int classYear, Student owner) {
@@ -15,7 +14,13 @@ public class Assessment extends AssessmentTemplate {
 	}
 	
 	public String getStatus() {
-		return  "hi";
+		if (status == 0) {
+			return "Not Started";
+		} else if (status == 1) {
+			return "In Progress";
+		} else {
+			return "Complete";
+		}
 	}
 	
 	public void setPassed() {
@@ -24,6 +29,10 @@ public class Assessment extends AssessmentTemplate {
 	
 	public void setComplete() {
 		
+	}
+	
+	public String toString() {
+		return super.getName() + " Status: " + getStatus();
 	}
 	
 	

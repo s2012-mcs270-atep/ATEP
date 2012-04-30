@@ -55,6 +55,8 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		ArrayList<Student> studentList = new ArrayList<Student>();
 		// Test name
+		Student harry = new Student("Harry", 2);
+		//harry.addAssessment(new Assessment())
 		studentList.add(new Student("Harry", 2));
 		studentList.add(new Student("Mary", 1));
 		//TODO insert code here to fill the list
@@ -99,7 +101,7 @@ public class ATEP_Web_App implements EntryPoint {
 			ArrayList<Assessment> assessments = s.getMyAssessments();
 			for (Assessment a : assessments) {
 				assessmentListPanel.add(new Label(a.getName() + " Status: " + a.getStatus()));
-				studentListPanel.add(new Button("Delete this student"));
+				studentListPanel.add(new Button("Delete this assessment"));
 			}
 		}
 		

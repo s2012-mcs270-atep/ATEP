@@ -17,6 +17,10 @@ public class Student extends User {
 		return classYear;
 	}
 	
+	public void addAssessment(Assessment a) {
+		myAssessments.add(a);
+	}
+	
 	public ArrayList<Assessment> getMyAssessments() {
 		if (myAssessments == null) {
 			return new ArrayList<Assessment>();
