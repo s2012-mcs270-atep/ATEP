@@ -10,7 +10,7 @@ public class Student extends User {
 	public Student(String n, int cY) {
 		super(n);
 		classYear = cY;
-		myAssessments = null;
+		myAssessments = new ArrayList<Assessment>();
 	}
 	
 	public int getClassYear() {
