@@ -9,6 +9,7 @@ public class Assessment extends AssessmentTemplate {
 	public Assessment(String name, ArrayList<Category> categories, int classYear, Student owner) {
 		super(name, categories, classYear);
 		this.owner = owner;
+		status = 0;
 		// make a copy of appropriate assessment form for specified student owner
 	
 	}
