@@ -2,6 +2,7 @@ package edu.gac.ATEP.shared;
 import java.util.ArrayList;
 
 
+
 public class Assessment extends AssessmentTemplate {
 	private int status; // 0 if not started, 1 if in progress, 2 if complete
 	private Student owner;
