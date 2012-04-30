@@ -3,10 +3,12 @@ import java.util.ArrayList;
 
 
 public class Category {
+	private String name;
 	public ArrayList<Question> questions;
 //category of questions
 
-	public Category(ArrayList<Question> questions) {
+	public Category(String name, ArrayList<Question> questions) {
+		this.name = name;
 		this.questions = questions;
 	}
 	
