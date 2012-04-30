@@ -10,10 +10,18 @@ public class Student extends User {
 	public Student(String n, int cY) {
 		super(n);
 		classYear = cY;
+		myAssessments = null;
 	}
 	
 	public int getClassYear() {
 		return classYear;
+	}
+	
+	public ArrayList<Assessment> getMyAssessments() {
+		if (myAssessments == null) {
+			return new ArrayList<Assessment>();
+		}
+		return myAssessments;
 	}
 	
 	public String toString() {

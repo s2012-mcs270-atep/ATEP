@@ -17,4 +17,8 @@ public class AssessmentTemplate {
 		// each category added to a list of categories for this template which is passed as 
 		// a parameter to this constructor
 	}
+	
+	public String getName() {
+		return name;
+	}
 }

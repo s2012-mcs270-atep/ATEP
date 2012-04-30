@@ -2,6 +2,7 @@ package edu.gac.ATEP.client;
 
 import java.util.ArrayList;
 
+import edu.gac.ATEP.shared.Assessment;
 import edu.gac.ATEP.shared.FieldVerifier;
 import edu.gac.ATEP.shared.Student;
 
@@ -69,15 +70,41 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		Label lblSearchStudents = new Label("Search Students");
 		mainPanel.add(lblSearchStudents);
+		lblSearchStudents.setWidth("240px");
 		
 		StackPanel studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
+		studentListPanel.setWidth("240px");
+		
+		Label lblEditTemplates = new Label("Edit Assessment Templates");
+		mainPanel.add(lblEditTemplates);
+		lblEditTemplates.setWidth("240px");
+		
+		StackPanel assessmentTemplatePanel = new StackPanel();
+		mainPanel.add(assessmentTemplatePanel);
+		assessmentTemplatePanel.setSize("240px", "54px");
+		
+		Label lblAssessmentList = new Label("Assessments");
+		lblAssessmentList.setWidth("240px");
+		
+		StackPanel assessmentListPanel = new StackPanel();
+		assessmentListPanel.setWidth("240px");
+
 		
 		for (Student s : studentList) {
 			studentListPanel.add(new Label("Year in Program: " + s.getClassYear()), s.getName());
+			studentListPanel.add(new Button("Delete this student"));
+			studentListPanel.add(lblAssessmentList);
+			studentListPanel.add(assessmentListPanel);
+			ArrayList<Assessment> assessments = s.getMyAssessments();
+			for (Assessment a : assessments) {
+				assessmentListPanel.add(new Label(a.getName() + " Status: " + a.getStatus()));
+				studentListPanel.add(new Button("Delete this student"));
+			}
 		}
 		
-
+		//end of assessor/student stuff
+		
 		
 
 		// Create a handler for the sendButton and nameField
