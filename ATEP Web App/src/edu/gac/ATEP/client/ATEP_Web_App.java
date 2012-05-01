@@ -56,19 +56,20 @@ public class ATEP_Web_App implements EntryPoint {
 		final Label errorLabel = new Label();
 		errorLabel.addStyleName("error");
 		
+		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
-		// Test name
 		ArrayList<Category> categories = new ArrayList<Category>();
 		ArrayList<Question> questions = new ArrayList<Question>();
 
 		Category category1 = new Category("Category 1", questions);
 		Question q1 = new Question(category1, "Body of Question 1");
 		Student harry = new Student("Harry", 2);
+		Student mary = new Student("Mary", 3);
 		AssessmentTemplate aT = new AssessmentTemplate("Template 1", categories, 2);
 		harry.addAssessment(new Assessment(aT, harry));
+		mary.addAssessment(new Assessment(aT, mary));
 		studentList.add(harry);
-		studentList.add(new Student("Mary", 1));
-		//TODO insert code here to fill the list
+		studentList.add(mary);
 		
 		// Create some panels to hold the widgets together
 		final VerticalPanel mainPanel = new VerticalPanel();
@@ -81,40 +82,55 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		Label lblSearchStudents = new Label("Search Students");
 		mainPanel.add(lblSearchStudents);
-		lblSearchStudents.setWidth("240px");
+		lblSearchStudents.setWidth("420px");
 		
 		StackPanel studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
-		studentListPanel.setWidth("240px");
-		
-		Label lblEditTemplates = new Label("Edit Assessment Templates");
-		mainPanel.add(lblEditTemplates);
-		lblEditTemplates.setWidth("240px");
+		studentListPanel.setWidth("420px");
 		
 		StackPanel assessmentTemplatePanel = new StackPanel();
 		mainPanel.add(assessmentTemplatePanel);
-		assessmentTemplatePanel.setSize("240px", "54px");
+		assessmentTemplatePanel.setSize("418px", "54px");
 		
 		Label lblAssessmentList = new Label("Assessments");
 		lblAssessmentList.setWidth("240px");
 		
 		StackPanel assessmentListPanel = new StackPanel();
 		assessmentListPanel.setWidth("240px");
-
 		
+		//Set up display of student list and list of assessments for each student
+		VerticalPanel assessmentInfoPanel = new VerticalPanel();
+		ArrayList<VerticalPanel> studentInfoPanels = new ArrayList<VerticalPanel>();
+		ArrayList<VerticalPanel> assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		for (Student s : studentList) {
-			studentListPanel.add(new Label("Year in Program: " + s.getClassYear()), s.getName());
-			studentListPanel.add(new Button("Delete this student"));
-			studentListPanel.add(lblAssessmentList);
-			studentListPanel.add(assessmentListPanel);
+			studentInfoPanels.add(new VerticalPanel());
 			ArrayList<Assessment> assessments = s.getMyAssessments();
 			for (Assessment a : assessments) {
-				assessmentListPanel.add(new Label(a.getName() + " Status: " + a.getStatus()));
-				studentListPanel.add(new Button("Delete this assessment"));
+				assessmentInfoPanels.add(new VerticalPanel());
 			}
 		}
 		
-		//end of assessor/student stuff
+		//populate student and assessment lists
+		int i = 0, j = 0;
+		for (Student s : studentList) {
+			VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
+			studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
+			studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
+			studentInfoPanel.add(new Label("Current Assessments:"));
+			ArrayList<Assessment> assessments = s.getMyAssessments();
+			for (Assessment a : assessments) {
+				assessmentInfoPanel = assessmentInfoPanels.get(j);
+				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+				assessmentInfoPanel.add(new Button("Delete this assessment"));
+				studentInfoPanel.add(assessmentInfoPanel);
+				j++;
+			}
+			
+			studentListPanel.add(studentInfoPanel, s.getName());
+			i++;
+
+		}
+
 		
 		
 

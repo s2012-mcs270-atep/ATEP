@@ -42,7 +42,7 @@ public class Assessment{
 	}
 	
 	public String toString() {
-		return name + " for " + owner + ". Status: " + getStatus();
+		return name + " for " + owner.getName() + ". Status: " + getStatus();
 	}
 	
 	
