@@ -3,6 +3,8 @@ package edu.gac.ATEP.client;
 import java.util.ArrayList;
 
 import edu.gac.ATEP.shared.Assessment;
+import edu.gac.ATEP.shared.AssessmentStore;
+import edu.gac.ATEP.shared.AssessmentStoreAsync;
 import edu.gac.ATEP.shared.AssessmentTemplate;
 import edu.gac.ATEP.shared.Category;
 import edu.gac.ATEP.shared.FieldVerifier;
@@ -35,6 +37,7 @@ import com.google.gwt.user.client.ui.StackPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
+	private final AssessmentStoreAsync assessmentStore = GWT.create(AssessmentStore.class);
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -43,11 +46,6 @@ public class ATEP_Web_App implements EntryPoint {
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
 
 	/**
 	 * This is the entry point method.
