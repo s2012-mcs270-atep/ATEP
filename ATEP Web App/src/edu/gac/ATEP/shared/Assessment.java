@@ -32,6 +32,10 @@ public class Assessment{
 			return "Complete";
 		}
 	}
+	public int getClassYear() { 
+		return classYear; 
+		
+	}
 	
 	public void setInProgress() { 
 		status = 1;
