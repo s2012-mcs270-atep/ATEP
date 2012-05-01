@@ -3,6 +3,7 @@ package edu.gac.ATEP.client;
 import java.util.ArrayList;
 
 import edu.gac.ATEP.shared.Assessment;
+import edu.gac.ATEP.shared.AssessmentTemplate;
 import edu.gac.ATEP.shared.Category;
 import edu.gac.ATEP.shared.FieldVerifier;
 import edu.gac.ATEP.shared.Question;
@@ -63,8 +64,9 @@ public class ATEP_Web_App implements EntryPoint {
 		Category category1 = new Category("Category 1", questions);
 		Question q1 = new Question(category1, "Body of Question 1");
 		Student harry = new Student("Harry", 2);
-		harry.addAssessment(new Assessment("Assessment 1", categories, 2, harry));
-		studentList.add(new Student("Harry", 2));
+		AssessmentTemplate aT = new AssessmentTemplate("Template 1", categories, 2);
+		harry.addAssessment(new Assessment(aT, harry));
+		studentList.add(harry);
 		studentList.add(new Student("Mary", 1));
 		//TODO insert code here to fill the list
 		

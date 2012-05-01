@@ -1,10 +1,10 @@
 package edu.gac.ATEP.shared;
-import java.util.ArrayList;
 
 
 
 public class Assessment{
-	private String name;
+	private String name; //need to make sure this name matches the name of the template it 
+						 // was created from
 	private int status; // 0 if not started, 1 if in progress, 2 if complete
 	private Student owner;
 	private int classYear; 
@@ -17,6 +17,10 @@ public class Assessment{
 		// have we accounted for all info. needed to initialize an assessment? 
 		// make a copy of appropriate assessment form for specified student owner
 	
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public String getStatus() {
@@ -38,7 +42,7 @@ public class Assessment{
 	}
 	
 	public String toString() {
-		return super.getName() + " Status: " + getStatus();
+		return name + " for " + owner + ". Status: " + getStatus();
 	}
 	
 	
