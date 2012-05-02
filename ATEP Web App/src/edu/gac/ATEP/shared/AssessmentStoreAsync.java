@@ -1,23 +1,28 @@
+/**
+ * 
+ */
 package edu.gac.ATEP.shared;
 
 import java.util.List;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
-
 /**
- * The async counterpart of <code>GreetingService</code>.
+ * @author helen
+ *
  */
 public interface AssessmentStoreAsync {
 
 	/**
 	 * 
-	 * @see edu.gac.mcs270.messageboard.shared.MessageStore#getMessages(long)
+	 * @see edu.gac.ATEP.shared.AssessmentStore#getAssessments(java.lang.Long)
 	 */
 	void getAssessments(Long minimumID, AsyncCallback<List<Assessment>> callback);
 
 	/**
 	 * 
-	 * @see edu.gac.mcs270.messageboard.shared.MessageStore#storeMessage(edu.gac.mcs270.messageboard.shared.Message)
+	 * @see edu.gac.ATEP.shared.AssessmentStore#storeAssessment(edu.gac.ATEP.shared.Assessment)
 	 */
-	void storeAssessment(Assessment msg, AsyncCallback<Void> callback);
+	void storeAssessment(Assessment assessment, AsyncCallback<Void> callback);
+
 }
