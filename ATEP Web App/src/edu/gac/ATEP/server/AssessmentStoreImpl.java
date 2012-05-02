@@ -46,8 +46,8 @@ public class AssessmentStoreImpl extends RemoteServiceServlet implements
 				query.setRange(0, AssessmentStore.INITIAL_LIMIT);
 			}
 			@SuppressWarnings("unchecked")
-			List<Assessment> messages = (List<Assessment>) query.execute(minimumID);
-			return new ArrayList<Assessment>(messages);
+			List<Assessment> assessments = (List<Assessment>) query.execute(minimumID);
+			return new ArrayList<Assessment>(assessments);
 		}
 	
 

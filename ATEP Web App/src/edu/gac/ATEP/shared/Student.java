@@ -31,4 +31,9 @@ public class Student extends User {
 	public String toString() {
 		return super.toString() + " -- Year in Program: " + classYear;
 	}
+	
+	@SuppressWarnings("unused")
+	private Student(){
+		super();
+	}
 }

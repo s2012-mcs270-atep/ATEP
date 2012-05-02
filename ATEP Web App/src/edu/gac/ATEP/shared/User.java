@@ -1,6 +1,8 @@
 package edu.gac.ATEP.shared;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 	private String name; //Username or name?
 	
 	public User(String n) {
@@ -14,4 +16,7 @@ public class User {
 	public String toString(){
 		return name + ""; // fill in later with other parameters?
 	}
+	
+	@SuppressWarnings("unused")
+	public User(){}
 }
