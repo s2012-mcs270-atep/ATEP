@@ -9,13 +9,13 @@ package edu.gac.ATEP.shared;
 	 * The client-to-server interface for storing/retrieving messages.
 	 * @author max
 	 */
-	@RemoteServiceRelativePath("MessageStore")
-	public interface AssessmentStore extends RemoteService {
+	@RemoteServiceRelativePath("AssessmentTempStore")
+	public interface AssessmentTempStore extends RemoteService {
 		/**
 		 * Store a Message.
 		 * @param msg the Message to store
 		 */
-		public void storeAssessment(Assessment assessment);
+		public void storeAssessmentTemplate(AssessmentTemplate aT);
 
 		/**
 		 * Retrieve Messages.
@@ -24,7 +24,7 @@ package edu.gac.ATEP.shared;
 		 * @param minimumID the lowest ID (oldest Message) to include
 		 * @return a List from newest (greatest id) to oldest (least id)
 		 */
-		List<Assessment> getAssessments(Long minimumID);
+		List<AssessmentTemplate> getAssessmentTemplates(Long minimumID);
 
 		/**
 		 * Limit on how far back into history initial retrievals go.

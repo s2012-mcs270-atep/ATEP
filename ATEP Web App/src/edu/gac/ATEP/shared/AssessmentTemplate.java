@@ -1,13 +1,15 @@
 package edu.gac.ATEP.shared;
 import javax.swing.JCheckBox;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-
-public class AssessmentTemplate {
+public class AssessmentTemplate implements Serializable {
 	private String name;
 	private ArrayList<Category> categories;
 
 	private int classYear; // used to determine who should take this assessment
+	
+	private static final long serialVersionID = 1L; 
 
 	public AssessmentTemplate(String name, ArrayList<Category> categories, int classYear) {
 		this.name = name;
@@ -25,4 +27,7 @@ public class AssessmentTemplate {
 	public int getClassYear() { 
 		return classYear;
 	}
+	
+	@SuppressWarnings("unused") 
+	private AssessmentTemplate(){}
 }

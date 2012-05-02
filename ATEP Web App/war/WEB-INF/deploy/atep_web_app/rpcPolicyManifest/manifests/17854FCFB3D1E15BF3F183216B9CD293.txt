@@ -1,0 +1,2 @@
+serviceClass: edu.gac.ATEP.shared.AssessmentStore
+path: 45213104CCBD0C88EDA06744649DEA08.gwt.rpc

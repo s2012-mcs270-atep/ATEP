@@ -7,14 +7,25 @@
 
   <!-- Servlets -->
   <servlet>
-    <servlet-name>assessmentStoreServlet</servlet-name>
-    <servlet-class>edu.gac.ATEP.server.AssessmentStoreImpl</servlet-class>
+    <servlet-name>assessmentTempStoreServlet</servlet-name>
+    <servlet-class>edu.gac.ATEP.server.AssessmentTempStoreImpl</servlet-class>
+  </servlet>
+    <servlet>
+    <servlet-name>StudentStoreServlet</servlet-name>
+    <servlet-class>edu.gac.ATEP.server.StudentStoreImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>assessmentStoreServlet</servlet-name>
-    <url-pattern>/atep_web_app/AssessmentStore</url-pattern>
+    <servlet-name>assessmentTempStoreServlet</servlet-name>
+    <url-pattern>/atep_web_app/assessmentTempStore</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet-mapping>
+    <servlet-name>StudentStoreServlet</servlet-name>
+    <url-pattern>/atep_web_app/StudentStore</url-pattern>
   </servlet-mapping>
+  
   
   <!-- Default page to serve -->
   <welcome-file-list>
