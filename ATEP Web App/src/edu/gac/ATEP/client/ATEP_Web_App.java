@@ -121,7 +121,8 @@ public class ATEP_Web_App implements EntryPoint {
 			for (Assessment a : assessments) {
 				assessmentInfoPanel = assessmentInfoPanels.get(j);
 				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-				assessmentInfoPanel.add(new Button("Delete this assessment"));
+				//assessmentInfoPanel.add(new Button("Edit assessment"));
+				//assessmentInfoPanel.add(new Button("Delete this assessment"));
 				studentInfoPanel.add(assessmentInfoPanel);
 				j++;
 			}
