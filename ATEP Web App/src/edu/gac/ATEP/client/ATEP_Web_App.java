@@ -1,6 +1,7 @@
 package edu.gac.ATEP.client;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.gac.ATEP.shared.Assessment;
 import edu.gac.ATEP.shared.AssessmentTempStore;
@@ -10,6 +11,8 @@ import edu.gac.ATEP.shared.Category;
 import edu.gac.ATEP.shared.FieldVerifier;
 import edu.gac.ATEP.shared.Question;
 import edu.gac.ATEP.shared.Student;
+import edu.gac.ATEP.shared.StudentStore;
+import edu.gac.ATEP.shared.StudentStoreAsync;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -38,6 +41,12 @@ import com.google.gwt.user.client.ui.StackPanel;
  */
 public class ATEP_Web_App implements EntryPoint {
 	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
+	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
+	private StackPanel studentListPanel;
+	private VerticalPanel assessmentInfoPanel;
+	private ArrayList<VerticalPanel> studentInfoPanels;
+	private ArrayList<VerticalPanel> assessmentInfoPanels;
+	private final long nextID = 1L; //TODO change if appropriate
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -82,7 +91,7 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.add(lblSearchStudents);
 		lblSearchStudents.setWidth("420px");
 		
-		StackPanel studentListPanel = new StackPanel();
+		studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
 		studentListPanel.setWidth("420px");
 		
@@ -96,41 +105,62 @@ public class ATEP_Web_App implements EntryPoint {
 		StackPanel assessmentListPanel = new StackPanel();
 		assessmentListPanel.setWidth("240px");
 		
-		//Set up display of student list and list of assessments for each student
-		VerticalPanel assessmentInfoPanel = new VerticalPanel();
-		ArrayList<VerticalPanel> studentInfoPanels = new ArrayList<VerticalPanel>();
-		ArrayList<VerticalPanel> assessmentInfoPanels = new ArrayList<VerticalPanel>();
-		for (Student s : studentList) {
-			studentInfoPanels.add(new VerticalPanel());
-			ArrayList<Assessment> assessments = s.getMyAssessments();
-			for (Assessment a : assessments) {
-				assessmentInfoPanels.add(new VerticalPanel());
-			}
-		}
+		assessmentInfoPanel = new VerticalPanel();
+		studentInfoPanels = new ArrayList<VerticalPanel>();
+		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		
-		//populate student and assessment lists
-		int i = 0, j = 0;
-		for (Student s : studentList) {
-			VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
-			studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
-			studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
-			studentInfoPanel.add(new Label("Current Assessments:"));
-			ArrayList<Assessment> assessments = s.getMyAssessments();
-			for (Assessment a : assessments) {
-				assessmentInfoPanel = assessmentInfoPanels.get(j);
-				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-				assessmentInfoPanel.add(new Button("Delete this assessment"));
-				studentInfoPanel.add(assessmentInfoPanel);
-				j++;
-			}
-			
-			studentListPanel.add(studentInfoPanel, s.getName());
-			i++;
+		//if there are no students in the database, prompt to add students
+		//for now, just add manually
+		studentStore.storeStudent(harry, 
+			new AsyncCallback<Void>(){
+				@Override
+				public void onFailure(Throwable caught) {
+					//might want to add a failure label here later
+				}
+	
+				@Override
+				public void onSuccess(Void result) {
+					updateStudentList();
+				}
+			});
+		
+		studentStore.getStudents(nextID,
+				new AsyncCallback<List<Student>>(){
 
-		}
+				@Override
+				public void onFailure(Throwable caught) {
+				}
 
+				@Override
+				public void onSuccess(List<Student> studentList) {
+				//Set up display of student list and list of assessments for each student
+					//populate student and assessment lists
+				int i = 0;
+				int j = 0;
+				for(Student s : studentList){
+					//add student info to the student info panel for each student displayed
+					studentInfoPanels.add(new VerticalPanel());
+					VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
+					studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
+					studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
+					studentInfoPanel.add(new Label("Current Assessments:"));
+					ArrayList<Assessment> assessments = s.getMyAssessments();
+					for (Assessment a : assessments) {
+						assessmentInfoPanels.add(new VerticalPanel());
+						assessmentInfoPanel = assessmentInfoPanels.get(j);
+						assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+						assessmentInfoPanel.add(new Button("Delete this assessment"));
+						studentInfoPanel.add(assessmentInfoPanel);
+						j++;
+					}
+					i++;
+				}
+				
+				}
+
+				});
 		
-		
+	
 
 		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -161,5 +191,47 @@ public class ATEP_Web_App implements EntryPoint {
 
 		// Add a handler to send the name to the server
 		MyHandler handler = new MyHandler();
+	}
+	
+	private void updateStudentList() {
+		/*if(updatingLabel.isVisible()){
+			return;
+		}*/
+		/*updatingLabel.setVisible(true);
+		failureLabel.setVisible(false);*/
+		studentStore.getStudents(nextID,
+				new AsyncCallback<List<Student>>(){
+
+					@Override
+					public void onFailure(Throwable caught) {
+					/*updatingLabel.setVisible(false);
+					failureLabel.setVisible(true);*/
+					}
+		
+					@Override
+					public void onSuccess(List<Student> studentList) {
+					//updatingLabel.setVisible(false);
+					int i = 0;
+					int j = 0;
+					for(Student s : studentList){
+						//call method to display list
+						VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
+						studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
+						studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
+						studentInfoPanel.add(new Label("Current Assessments:"));
+						ArrayList<Assessment> assessments = s.getMyAssessments();
+						for (Assessment a : assessments) {
+							assessmentInfoPanel = assessmentInfoPanels.get(j);
+							assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+							assessmentInfoPanel.add(new Button("Delete this assessment"));
+							studentInfoPanel.add(assessmentInfoPanel);
+							j++;
+						}
+						i++;
+					}
+		
+					}
+
+		});
 	}
 }
