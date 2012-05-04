@@ -16,7 +16,7 @@ public class Student extends User implements Serializable {
 	private String name;
 	@Persistent
 	private int classYear;
-	@Persistent
+	@Persistent(serialized="true")
 	private ArrayList<Assessment> myAssessments;
 	
 	
