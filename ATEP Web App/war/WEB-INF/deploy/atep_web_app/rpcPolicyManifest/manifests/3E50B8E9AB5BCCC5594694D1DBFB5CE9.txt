@@ -1,0 +1,2 @@
+serviceClass: edu.gac.ATEP.shared.AssessmentTempStore
+path: D4EC95ED543146E6014317BD9218221E.gwt.rpc

@@ -3,15 +3,21 @@ package edu.gac.ATEP.shared;
 import java.io.Serializable;
 
 
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
+
+import org.datanucleus.jpa.Persistable;
 
 public class Assessment implements Serializable {
 	private String name; //need to make sure this name matches the name of the template it 
-						 // was created from
+						// was created from
 	private int status; // 0 if not started, 1 if in progress, 2 if complete
 	private Student owner;
 	private int classYear; 
 	
-	private static final long serialVersionID = 1L;
 	
 	public Assessment(AssessmentTemplate template, Student owner) {
 		name = template.getName(); 

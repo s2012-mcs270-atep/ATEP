@@ -1,0 +1,2 @@
+serviceClass: edu.gac.ATEP.shared.StudentStore
+path: 8C7C3562B80CE29D9BB40980D620AAA6.gwt.rpc
