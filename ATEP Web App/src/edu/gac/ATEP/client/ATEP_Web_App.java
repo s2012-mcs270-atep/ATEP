@@ -3,6 +3,8 @@ package edu.gac.ATEP.client;
 import java.util.ArrayList;
 
 import edu.gac.ATEP.shared.Assessment;
+import edu.gac.ATEP.shared.AssessmentTempStore;
+import edu.gac.ATEP.shared.AssessmentTempStoreAsync;
 import edu.gac.ATEP.shared.AssessmentTemplate;
 import edu.gac.ATEP.shared.Category;
 import edu.gac.ATEP.shared.FieldVerifier;
@@ -19,6 +21,7 @@ import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.FocusWidget;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
@@ -35,6 +38,7 @@ import com.google.gwt.user.client.ui.StackPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
+	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -43,18 +47,13 @@ public class ATEP_Web_App implements EntryPoint {
 			+ "attempting to contact the server. Please check your network "
 			+ "connection and try again.";
 
-	/**
-	 * Create a remote service proxy to talk to the server-side Greeting service.
-	 */
-	private final GreetingServiceAsync greetingService = GWT
-			.create(GreetingService.class);
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		final Label errorLabel = new Label();
-		errorLabel.addStyleName("error");
+		//final Button viewButton = new Button("View");
+		final Button rtslButton = new Button("Return to Student List");
 		
 		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
@@ -70,15 +69,21 @@ public class ATEP_Web_App implements EntryPoint {
 		mary.addAssessment(new Assessment(aT, mary));
 		studentList.add(harry);
 		studentList.add(mary);
-		
-		// Create some panels to hold the widgets together
-		final VerticalPanel mainPanel = new VerticalPanel();
-		mainPanel.add(errorLabel);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
+		final Label errorLabel = new Label();
+		errorLabel.addStyleName("error");
+		
+		// Create some panels to hold the widgets together
+		final VerticalPanel mainPanel = new VerticalPanel();
+		mainPanel.add(errorLabel);
 		rootPanel.add(mainPanel);
+		
+		final VerticalPanel assessmentPanel = new VerticalPanel();
+		assessmentPanel.setVisible(false);
+		assessmentPanel.add(rtslButton);
 		
 		Label lblSearchStudents = new Label("Search Students");
 		mainPanel.add(lblSearchStudents);
@@ -91,6 +96,7 @@ public class ATEP_Web_App implements EntryPoint {
 		StackPanel assessmentTemplatePanel = new StackPanel();
 		mainPanel.add(assessmentTemplatePanel);
 		assessmentTemplatePanel.setSize("418px", "54px");
+		rootPanel.add(assessmentPanel);
 		
 		Label lblAssessmentList = new Label("Assessments");
 		lblAssessmentList.setWidth("240px");
@@ -110,6 +116,22 @@ public class ATEP_Web_App implements EntryPoint {
 			}
 		}
 		
+///////////////////////////////Create a handler for the ViewAssessmentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class ViewAssessmentHandler implements ClickHandler{
+			
+			//Fired when the user clicks on the ViewAssessmentButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				assessmentPanel.setVisible(true);
+			}
+
+			//Send the name selected from the student list to the server and wait for a response.
+			private void sendNameToServer() {
+				// TODO we may need this method later when a student name 
+				//      is selected in order to retrieve their info
+			}
+		}
+		
 		//populate student and assessment lists
 		int i = 0, j = 0;
 		for (Student s : studentList) {
@@ -120,10 +142,14 @@ public class ATEP_Web_App implements EntryPoint {
 			ArrayList<Assessment> assessments = s.getMyAssessments();
 			for (Assessment a : assessments) {
 				assessmentInfoPanel = assessmentInfoPanels.get(j);
-				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-				//assessmentInfoPanel.add(new Button("Edit assessment"));
-				//assessmentInfoPanel.add(new Button("Delete this assessment"));
+				HorizontalPanel assessmentViewPanel = new HorizontalPanel();
+				assessmentViewPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+				Button viewButton = new Button("View " + a.getName());
+				assessmentViewPanel.add(viewButton);
+				ViewAssessmentHandler viewAssessment = new ViewAssessmentHandler();
+				viewButton.addClickHandler(viewAssessment);
 				studentInfoPanel.add(assessmentInfoPanel);
+				studentInfoPanel.add(assessmentViewPanel);
 				j++;
 			}
 			
@@ -132,37 +158,19 @@ public class ATEP_Web_App implements EntryPoint {
 
 		}
 
-		
-		
 
-		// Create a handler for the sendButton and nameField
-		class MyHandler implements ClickHandler, KeyUpHandler {
-			/**
-			 * Fired when the user clicks on the sendButton.
-			 */
-			public void onClick(ClickEvent event) {
-				sendNameToServer();
+///////////////////////////////Create a handler for the rtslButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class rtslHandler implements ClickHandler {
+			
+			//fired when the user clicks on the rtslButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
 			}
-
-			/**
-			 * Fired when the user types in the nameField.
-			 */
-			public void onKeyUp(KeyUpEvent event) {
-				if (event.getNativeKeyCode() == KeyCodes.KEY_ENTER) {
-					sendNameToServer();
-				}
-			}
-
-			/**
-			 * Send the name selected from the student list to the server and wait for a response.
-			 */
-			private void sendNameToServer() {
-				// TODO we may need this method later when a student name 
-				//      is selected in order to retrieve their info
-			}	
 		}
 
-		// Add a handler to send the name to the server
-		MyHandler handler = new MyHandler();
+		// Add a handler to hide mainPanel and display assessmentPanel
+		rtslHandler rtsl = new rtslHandler();
+		rtslButton.addClickHandler(rtsl);
 	}
 }
