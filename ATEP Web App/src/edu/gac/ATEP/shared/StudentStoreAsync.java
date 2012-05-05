@@ -13,10 +13,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  */
 public interface StudentStoreAsync {
 
-	/**
-	 * 
-	 * @see edu.gac.ATEP.shared.StudentStore#getStudents(java.lang.Long)
-	 */
 	void getStudents(Long minimumID, AsyncCallback<List<Student>> callback);
 
 	/**

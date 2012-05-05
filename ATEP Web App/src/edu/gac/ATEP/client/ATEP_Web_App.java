@@ -74,8 +74,7 @@ public class ATEP_Web_App implements EntryPoint {
 		AssessmentTemplate aT = new AssessmentTemplate("Template 1", categories, 2);
 		harry.addAssessment(new Assessment(aT, harry));
 		mary.addAssessment(new Assessment(aT, mary));
-		studentList.add(harry);
-		studentList.add(mary);
+
 		
 		// Create some panels to hold the widgets together
 		final VerticalPanel mainPanel = new VerticalPanel();
@@ -112,6 +111,7 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		//if there are no students in the database, prompt to add students
 		//for now, just add manually
+		
 		studentStore.storeStudent(harry, 
 			new AsyncCallback<Void>(){
 				@Override
@@ -125,7 +125,7 @@ public class ATEP_Web_App implements EntryPoint {
 				}
 			});
 		
-		studentStore.getStudents(nextID,
+		/*studentStore.getStudents(nextID,
 				new AsyncCallback<List<Student>>(){
 
 				@Override
@@ -140,7 +140,7 @@ public class ATEP_Web_App implements EntryPoint {
 				
 				}
 
-				});
+				});*/
 		
 	
 
