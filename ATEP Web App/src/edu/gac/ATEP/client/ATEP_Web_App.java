@@ -46,7 +46,7 @@ public class ATEP_Web_App implements EntryPoint {
 	private VerticalPanel assessmentInfoPanel;
 	private ArrayList<VerticalPanel> studentInfoPanels;
 	private ArrayList<VerticalPanel> assessmentInfoPanels;
-	private final long nextID = 1L; //TODO change if appropriate
+	private Long nextID = 1L; //TODO change if appropriate
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -69,7 +69,6 @@ public class ATEP_Web_App implements EntryPoint {
 		ArrayList<Question> questions = new ArrayList<Question>();
 
 		Category category1 = new Category("Category 1", questions);
-		Question q1 = new Question(category1, "Body of Question 1");
 		Student harry = new Student("Harry", 2);
 		Student mary = new Student("Mary", 3);
 		AssessmentTemplate aT = new AssessmentTemplate("Template 1", categories, 2);
@@ -109,6 +108,8 @@ public class ATEP_Web_App implements EntryPoint {
 		studentInfoPanels = new ArrayList<VerticalPanel>();
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		
+		
+		
 		//if there are no students in the database, prompt to add students
 		//for now, just add manually
 		studentStore.storeStudent(harry, 
@@ -133,28 +134,9 @@ public class ATEP_Web_App implements EntryPoint {
 
 				@Override
 				public void onSuccess(List<Student> studentList) {
-				//Set up display of student list and list of assessments for each student
+					//Set up display of student list and list of assessments for each student
 					//populate student and assessment lists
-				int i = 0;
-				int j = 0;
-				for(Student s : studentList){
-					//add student info to the student info panel for each student displayed
-					studentInfoPanels.add(new VerticalPanel());
-					VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
-					studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
-					studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
-					studentInfoPanel.add(new Label("Current Assessments:"));
-					ArrayList<Assessment> assessments = s.getMyAssessments();
-					for (Assessment a : assessments) {
-						assessmentInfoPanels.add(new VerticalPanel());
-						assessmentInfoPanel = assessmentInfoPanels.get(j);
-						assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-						assessmentInfoPanel.add(new Button("Delete this assessment"));
-						studentInfoPanel.add(assessmentInfoPanel);
-						j++;
-					}
-					i++;
-				}
+					constructStudentPanels(studentList);
 				
 				}
 
@@ -193,6 +175,29 @@ public class ATEP_Web_App implements EntryPoint {
 		MyHandler handler = new MyHandler();
 	}
 	
+	private void constructStudentPanels(List<Student> studentList) {
+		int i = 0;
+		int j = 0;
+		for(Student s : studentList){
+			//add student info to the student info panel for each student displayed
+			studentInfoPanels.add(new VerticalPanel());
+			VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
+			studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
+			studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
+			studentInfoPanel.add(new Label("Current Assessments:"));
+			ArrayList<Assessment> assessments = s.getMyAssessments();
+			for (Assessment a : assessments) {
+				assessmentInfoPanels.add(new VerticalPanel());
+				assessmentInfoPanel = assessmentInfoPanels.get(j);
+				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+				assessmentInfoPanel.add(new Button("Delete this assessment"));
+				studentInfoPanel.add(assessmentInfoPanel);
+				j++;
+			}
+			i++;
+		}
+	}
+	
 	private void updateStudentList() {
 		/*if(updatingLabel.isVisible()){
 			return;
@@ -210,26 +215,11 @@ public class ATEP_Web_App implements EntryPoint {
 		
 					@Override
 					public void onSuccess(List<Student> studentList) {
-					//updatingLabel.setVisible(false);
-					int i = 0;
-					int j = 0;
-					for(Student s : studentList){
-						//call method to display list
-						VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
-						studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
-						studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
-						studentInfoPanel.add(new Label("Current Assessments:"));
-						ArrayList<Assessment> assessments = s.getMyAssessments();
-						for (Assessment a : assessments) {
-							assessmentInfoPanel = assessmentInfoPanels.get(j);
-							assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-							assessmentInfoPanel.add(new Button("Delete this assessment"));
-							studentInfoPanel.add(assessmentInfoPanel);
-							j++;
+						//updatingLabel.setVisible(false);
+						constructStudentPanels(studentList);
+						if(!studentList.isEmpty()){
+							nextID = studentList.get(0).getID() + 1;
 						}
-						i++;
-					}
-		
 					}
 
 		});

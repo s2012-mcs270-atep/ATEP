@@ -12,8 +12,13 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Student extends User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@PrimaryKey
-	private String name;
+	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
+	private Long ID;
 	@Persistent
 	private int classYear;
 	@Persistent(serialized="true")
@@ -21,7 +26,7 @@ public class Student extends User implements Serializable {
 	
 	
 	public Student(String n, int cY) {
-		name = n;
+		super(n);
 		classYear = cY;
 		myAssessments = new ArrayList<Assessment>();
 	}
@@ -48,5 +53,10 @@ public class Student extends User implements Serializable {
 	@SuppressWarnings("unused")
 	private Student(){
 		super();
+	}
+
+	public Long getID() {
+		// TODO Auto-generated method stub
+		return ID;
 	}
 }

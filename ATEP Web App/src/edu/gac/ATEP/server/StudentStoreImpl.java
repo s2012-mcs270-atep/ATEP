@@ -32,6 +32,9 @@ public class StudentStoreImpl extends RemoteServiceServlet implements
 	public List<Student> getStudents(Long minimumID) {
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Query query = pm.newQuery(Student.class);
+		query.declareParameters("Long minimumID");
+		query.setFilter("id >= minimumID");
+		query.setOrdering("id descending");
 		@SuppressWarnings("unchecked")
 		List<Student> students = (List<Student>) query.execute();
 		return new ArrayList<Student>(students);
