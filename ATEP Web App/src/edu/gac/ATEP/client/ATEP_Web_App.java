@@ -125,6 +125,18 @@ public class ATEP_Web_App implements EntryPoint {
 				}
 			});
 		
+		studentStore.storeStudent(mary, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						//might want to add a failure label here later
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+						updateStudentList();
+					}
+				});
 		/*studentStore.getStudents(nextID,
 				new AsyncCallback<List<Student>>(){
 
@@ -178,10 +190,12 @@ public class ATEP_Web_App implements EntryPoint {
 	private void constructStudentPanels(List<Student> studentList) {
 		int i = 0;
 		int j = 0;
+		VerticalPanel studentInfoPanel;
 		for(Student s : studentList){
+			System.out.println(s.getName());
 			//add student info to the student info panel for each student displayed
-			studentInfoPanels.add(new VerticalPanel());
-			VerticalPanel studentInfoPanel = studentInfoPanels.get(i);
+			studentInfoPanel = new VerticalPanel();
+			studentInfoPanels.add(studentInfoPanel);
 			studentInfoPanel.add(new Label("Year in program: " + s.getClassYear()));
 			studentInfoPanel.add(new Button("Delete this student")); //remove if not admin
 			studentInfoPanel.add(new Label("Current Assessments:"));
@@ -194,6 +208,7 @@ public class ATEP_Web_App implements EntryPoint {
 				studentInfoPanel.add(assessmentInfoPanel);
 				j++;
 			}
+			studentListPanel.add(studentInfoPanel, s.getName());
 			i++;
 		}
 	}
