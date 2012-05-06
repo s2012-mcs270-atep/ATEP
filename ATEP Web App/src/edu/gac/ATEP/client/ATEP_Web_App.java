@@ -42,11 +42,15 @@ import com.google.gwt.user.client.ui.StackPanel;
 public class ATEP_Web_App implements EntryPoint {
 	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
 	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
+	private ArrayList<Student> currentStudents;
 	private StackPanel studentListPanel;
 	private VerticalPanel assessmentInfoPanel;
 	private ArrayList<VerticalPanel> studentInfoPanels;
 	private ArrayList<VerticalPanel> assessmentInfoPanels;
 	private Long nextID = 1L; //TODO change if appropriate
+	
+	private Label updatingLabel;
+	private Label failureLabel;
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -76,15 +80,27 @@ public class ATEP_Web_App implements EntryPoint {
 		mary.addAssessment(new Assessment(aT, mary));
 
 		
-		// Create some panels to hold the widgets together
+		// Create main panel to hold the widgets together
 		final VerticalPanel mainPanel = new VerticalPanel();
 		mainPanel.add(errorLabel);
+		
+		//set up updating and failure labels
+		final HorizontalPanel statusPanel = new HorizontalPanel();
+		statusPanel.setHeight("3em");
+		updatingLabel = new Label("Updating...");
+		updatingLabel.setVisible(false);
+		failureLabel = new Label("Lost connection to server.");
+		failureLabel.setVisible(false);
+		statusPanel.add(updatingLabel);
+		statusPanel.add(failureLabel);
+		mainPanel.add(statusPanel);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
 		rootPanel.add(mainPanel);
 		
+		//Add rest of panel structure
 		Label lblSearchStudents = new Label("Search Students");
 		mainPanel.add(lblSearchStudents);
 		lblSearchStudents.setWidth("420px");
@@ -106,8 +122,7 @@ public class ATEP_Web_App implements EntryPoint {
 		assessmentInfoPanel = new VerticalPanel();
 		studentInfoPanels = new ArrayList<VerticalPanel>();
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
-		
-		
+		currentStudents = new ArrayList<Student>();
 		
 		//if there are no students in the database, prompt to add students
 		//for now, just add manually
@@ -116,11 +131,12 @@ public class ATEP_Web_App implements EntryPoint {
 			new AsyncCallback<Void>(){
 				@Override
 				public void onFailure(Throwable caught) {
-					//might want to add a failure label here later
+					failureLabel.setVisible(true);
 				}
 	
 				@Override
 				public void onSuccess(Void result) {
+					failureLabel.setVisible(false);
 					updateStudentList();
 				}
 			});
@@ -129,11 +145,12 @@ public class ATEP_Web_App implements EntryPoint {
 				new AsyncCallback<Void>(){
 					@Override
 					public void onFailure(Throwable caught) {
-						//might want to add a failure label here later
+						failureLabel.setVisible(true);
 					}
 		
 					@Override
 					public void onSuccess(Void result) {
+						failureLabel.setVisible(false);
 						updateStudentList();
 					}
 				});
@@ -187,8 +204,30 @@ public class ATEP_Web_App implements EntryPoint {
 		MyHandler handler = new MyHandler();
 	}
 	
+	//TODO We need to figure out how we want to handle updates vs. displaying the updated list.  
+	// As you can see from Max's email, if we leave the project how it currently is, sometimes 
+	// on the first load, it won't display the students added to the database on startup.  This
+	// problem might go away once we implement assessors/admins adding students to the database
+	// instead of just doing it for them with default students on startup.  This method below
+	// will likely replace the storeStudent calls with harry and mary above.
+	private void addStudent(Student s) {
+		currentStudents.add(s);
+		studentStore.storeStudent(s, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						failureLabel.setVisible(true);
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+						failureLabel.setVisible(false);
+						updateStudentList();
+					}
+				});
+	}
+	
 	private void constructStudentPanels(List<Student> studentList) {
-		int i = 0;
 		int j = 0;
 		VerticalPanel studentInfoPanel;
 		for(Student s : studentList){
@@ -209,28 +248,27 @@ public class ATEP_Web_App implements EntryPoint {
 				j++;
 			}
 			studentListPanel.add(studentInfoPanel, s.getName());
-			i++;
 		}
 	}
 	
 	private void updateStudentList() {
-		/*if(updatingLabel.isVisible()){
+		if(updatingLabel.isVisible()){
 			return;
-		}*/
-		/*updatingLabel.setVisible(true);
-		failureLabel.setVisible(false);*/
+		}
+		updatingLabel.setVisible(true);
+		failureLabel.setVisible(false);
 		studentStore.getStudents(nextID,
 				new AsyncCallback<List<Student>>(){
 
 					@Override
 					public void onFailure(Throwable caught) {
-					/*updatingLabel.setVisible(false);
-					failureLabel.setVisible(true);*/
+					updatingLabel.setVisible(false);
+					failureLabel.setVisible(true);
 					}
 		
 					@Override
 					public void onSuccess(List<Student> studentList) {
-						//updatingLabel.setVisible(false);
+						updatingLabel.setVisible(false);
 						constructStudentPanels(studentList);
 						if(!studentList.isEmpty()){
 							nextID = studentList.get(0).getID() + 1;
