@@ -16,8 +16,7 @@ public class Student extends User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@PrimaryKey
-	@Persistent(valueStrategy=IdGeneratorStrategy.IDENTITY)
+	@Persistent(valueStrategy=IdGeneratorStrategy.SEQUENCE)
 	private Long ID;
 	@Persistent
 	private int classYear;
@@ -56,7 +55,6 @@ public class Student extends User implements Serializable {
 	}
 
 	public Long getID() {
-		// TODO Auto-generated method stub
 		return ID;
 	}
 }
