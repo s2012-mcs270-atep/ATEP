@@ -25,8 +25,8 @@ public class StudentPanel extends VerticalPanel{
 		
 		//Fired when the user clicks on the ViewAssessmentButton.
 		public void onClick(ClickEvent event){
-			mainPanel.setVisible(false);
-			assessmentPanel.setVisible(true);
+			/*mainPanel.setVisible(false);
+			assessmentPanel.setVisible(true);*/
 			VerticalPanel populatedPanel = new VerticalPanel();
 		}
 
@@ -49,9 +49,9 @@ public class StudentPanel extends VerticalPanel{
 			assessmentViewPanel.add(viewButton);
 			ViewAssessmentHandler viewAssessment = new ViewAssessmentHandler();
 			viewButton.addClickHandler(viewAssessment);
-			studentInfoPanel.add(assessmentInfoPanel);
+			/*studentInfoPanel.add(assessmentInfoPanel);
 			studentInfoPanel.add(assessmentViewPanel);
-			j++;
+			j++;*/
 		}
 	}
 }

@@ -276,6 +276,7 @@ public class ATEP_Web_App implements EntryPoint {
 			studentInfoPanel.add(new Label("Current Assessments:"));
 			ArrayList<Assessment> assessments = s.getMyAssessments();
 			for (Assessment a : assessments) {
+				System.out.println(a);
 				assessmentInfoPanel = assessmentInfoPanels.get(j);
 				HorizontalPanel assessmentViewPanel = new HorizontalPanel();
 				assessmentViewPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
