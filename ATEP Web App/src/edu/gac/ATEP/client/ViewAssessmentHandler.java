@@ -8,8 +8,8 @@ public class ViewAssessmentHandler implements ClickHandler{
 
 		//Fired when the user clicks on the ViewAssessmentButton.
 		public void onClick(ClickEvent event){
-			mainPanel.setVisible(false);
-			assessmentPanel.setVisible(true);
+			/*mainPanel.setVisible(false);
+			assessmentPanel.setVisible(true);*/
 			//VerticalPanel populatedPanel = new VerticalPanel();
 		}
 
