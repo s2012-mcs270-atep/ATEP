@@ -66,6 +66,9 @@ public class ATEP_Web_App implements EntryPoint {
 	public void onModuleLoad() {
 		final Label errorLabel = new Label();
 		errorLabel.addStyleName("error");
+		//final Button viewButton = new Button("View");
+		final Button rtslButton = new Button("Return to Student List");
+				
 		
 		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
@@ -109,6 +112,10 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.add(studentListPanel);
 		studentListPanel.setWidth("420px");
 		
+		final VerticalPanel assessmentPanel = new VerticalPanel();
+		assessmentPanel.setVisible(false);
+		assessmentPanel.add(rtslButton);
+		
 		StackPanel assessmentTemplatePanel = new StackPanel();
 		mainPanel.add(assessmentTemplatePanel);
 		assessmentTemplatePanel.setSize("418px", "54px");
@@ -124,8 +131,7 @@ public class ATEP_Web_App implements EntryPoint {
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		currentStudents = new ArrayList<Student>();
 		
-		//if there are no students in the database, prompt to add students
-		//for now, just add manually
+		
 		
 		studentStore.storeStudent(harry, 
 			new AsyncCallback<Void>(){
@@ -171,7 +177,37 @@ public class ATEP_Web_App implements EntryPoint {
 
 				});*/
 		
-	
+		///////////////////////////////Create a handler for the ViewAssessmentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class ViewAssessmentHandler implements ClickHandler{
+
+			//Fired when the user clicks on the ViewAssessmentButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				assessmentPanel.setVisible(true);
+				VerticalPanel populatedPanel = new VerticalPanel();
+			}
+
+			//Send the name selected from the student list to the server and wait for a response.
+			private void sendNameToServer() {
+				// TODO we may need this method later when a student name 
+				//      is selected in order to retrieve their info
+			}
+		}
+
+		class rtslHandler implements ClickHandler {
+
+			//fired when the user clicks on the rtslButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+			}
+		}
+
+		// Add a handler to hide mainPanel and display assessmentPanel
+		rtslHandler rtsl = new rtslHandler();
+		rtslButton.addClickHandler(rtsl);
+		//if there are no students in the database, prompt to add students
+		//for now, just add manually
 
 		// Create a handler for the sendButton and nameField
 		class MyHandler implements ClickHandler, KeyUpHandler {
@@ -240,11 +276,15 @@ public class ATEP_Web_App implements EntryPoint {
 			studentInfoPanel.add(new Label("Current Assessments:"));
 			ArrayList<Assessment> assessments = s.getMyAssessments();
 			for (Assessment a : assessments) {
-				assessmentInfoPanels.add(new VerticalPanel());
 				assessmentInfoPanel = assessmentInfoPanels.get(j);
-				assessmentInfoPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
-				assessmentInfoPanel.add(new Button("Delete this assessment"));
+				HorizontalPanel assessmentViewPanel = new HorizontalPanel();
+				assessmentViewPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
+				Button viewButton = new Button("View " + a.getName());
+				assessmentViewPanel.add(viewButton);
+				ViewAssessmentHandler viewAssessment = new ViewAssessmentHandler();
+				viewButton.addClickHandler(viewAssessment);
 				studentInfoPanel.add(assessmentInfoPanel);
+				studentInfoPanel.add(assessmentViewPanel);
 				j++;
 			}
 			studentListPanel.add(studentInfoPanel, s.getName());
@@ -257,6 +297,7 @@ public class ATEP_Web_App implements EntryPoint {
 		}
 		updatingLabel.setVisible(true);
 		failureLabel.setVisible(false);
+		System.out.println(nextID);
 		studentStore.getStudents(nextID,
 				new AsyncCallback<List<Student>>(){
 
