@@ -64,8 +64,10 @@ public class ATEP_Web_App implements EntryPoint {
 		Question q1 = new Question(category1, "Body of Question 1");
 		Student harry = new Student("Harry", 2);
 		Student mary = new Student("Mary", 3);
-		AssessmentTemplate aT = new AssessmentTemplate("Template 1", categories, 2);
+		AssessmentTemplate aT = new AssessmentTemplate("Assessment 1", categories, 2);
+		AssessmentTemplate aT2 = new AssessmentTemplate("Assessment 2", categories, 3);
 		harry.addAssessment(new Assessment(aT, harry));
+		harry.addAssessment(new Assessment(aT2, harry));
 		mary.addAssessment(new Assessment(aT, mary));
 		studentList.add(harry);
 		studentList.add(mary);
@@ -115,7 +117,8 @@ public class ATEP_Web_App implements EntryPoint {
 				assessmentInfoPanels.add(new VerticalPanel());
 			}
 		}
-		
+	
+
 ///////////////////////////////Create a handler for the ViewAssessmentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 		class ViewAssessmentHandler implements ClickHandler{
 			
@@ -123,6 +126,7 @@ public class ATEP_Web_App implements EntryPoint {
 			public void onClick(ClickEvent event){
 				mainPanel.setVisible(false);
 				assessmentPanel.setVisible(true);
+				VerticalPanel populatedPanel = new VerticalPanel();
 			}
 
 			//Send the name selected from the student list to the server and wait for a response.
@@ -131,6 +135,7 @@ public class ATEP_Web_App implements EntryPoint {
 				//      is selected in order to retrieve their info
 			}
 		}
+
 		
 		//populate student and assessment lists
 		int i = 0, j = 0;
