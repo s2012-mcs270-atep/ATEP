@@ -26,7 +26,6 @@ public class Assessment implements Serializable {
 	private Student owner;
 	@Persistent
 	private int classYear; 
-	//@Persistent
 	private AssessmentTemplate baseTemplate;
 	
 	public Assessment(AssessmentTemplate template, Student owner) {

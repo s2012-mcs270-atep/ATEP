@@ -1,10 +1,24 @@
 package edu.gac.ATEP.shared;
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.jdo.annotations.Extension;
+import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
+import javax.jdo.annotations.PrimaryKey;
 
-public class Category {
+@PersistenceCapable(identityType=IdentityType.APPLICATION)
+public class Category implements Serializable{
+	@PrimaryKey
+	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
 	private String name;
-	public ArrayList<Question> questions;
+	@Persistent
+	private ArrayList<Question> questions;
+	@Persistent
+	private AssessmentTemplate owner;
 //category of questions
 
 	public Category(String name, ArrayList<Question> questions) {

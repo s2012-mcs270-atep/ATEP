@@ -76,7 +76,7 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		ArrayList<Category> categoriesBones = new ArrayList<Category>();
 		ArrayList<Question> questionsBones = new ArrayList<Question>();
-		
+		AssessmentTemplate bonesTemplate = new AssessmentTemplate("Bones Assessment", categoriesBones, 2);
 		Category bones = new Category("Bones", questionsBones);
 		Question bones1 = new Question("How come bones?");
 		questionsBones.add(bones1);
@@ -84,6 +84,7 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		ArrayList<Category> categoriesFace = new ArrayList<Category>();
 		ArrayList<Question> questionsFace = new ArrayList<Question>();
+		AssessmentTemplate faceTemplate = new AssessmentTemplate("Face Assessment", categoriesFace, 3);
 		Category face = new Category("Face", questionsFace);
 		Question questionC1 = new Question("What's wrong with your face?");
 		questionsFace.add(questionC1);
@@ -91,8 +92,6 @@ public class ATEP_Web_App implements EntryPoint {
 
 		Student harry = new Student("Harry", 2);
 		Student mary = new Student("Mary", 3);
-		AssessmentTemplate bonesTemplate = new AssessmentTemplate("Bones Assessment", categoriesBones, 2);
-		AssessmentTemplate faceTemplate = new AssessmentTemplate("Face Assessment", categoriesFace, 3);
 		harry.addAssessment(new Assessment(bonesTemplate, harry));
 		mary.addAssessment(new Assessment(bonesTemplate, mary));
 		mary.addAssessment(new Assessment(faceTemplate, mary));
@@ -150,33 +149,33 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		
 		
-//		studentStore.storeStudent(harry, 
-//			new AsyncCallback<Void>(){
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					failureLabel.setVisible(true);
-//				}
-//	
-//				@Override
-//				public void onSuccess(Void result) {
-//					failureLabel.setVisible(false);
-//					updateStudentList();
-//				}
-//			});
-//		
-//		studentStore.storeStudent(mary, 
-//				new AsyncCallback<Void>(){
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						failureLabel.setVisible(true);
-//					}
-//		
-//					@Override
-//					public void onSuccess(Void result) {
-//						failureLabel.setVisible(false);
-//						updateStudentList();
-//					}
-//				});
+		studentStore.storeStudent(harry, 
+			new AsyncCallback<Void>(){
+				@Override
+				public void onFailure(Throwable caught) {
+					failureLabel.setVisible(true);
+				}
+	
+				@Override
+				public void onSuccess(Void result) {
+					failureLabel.setVisible(false);
+					updateStudentList();
+				}
+			});
+		
+		studentStore.storeStudent(mary, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						failureLabel.setVisible(true);
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+						failureLabel.setVisible(false);
+						updateStudentList();
+					}
+				});
 		/*studentStore.getStudents(nextID,
 				new AsyncCallback<List<Student>>(){
 
@@ -213,33 +212,33 @@ public class ATEP_Web_App implements EntryPoint {
 	// instead of just doing it for them with default students on startup.  This method below
 	// will likely replace the storeStudent calls with harry and mary above.
 		
-//	private void updateStudentList() {
-//		if(updatingLabel.isVisible()){
-//			return;
-//		}
-//		updatingLabel.setVisible(true);
-//		failureLabel.setVisible(false);
-//		studentStore.getStudents(nextID,
-//				new AsyncCallback<List<Student>>(){
-//
-//					@Override
-//					public void onFailure(Throwable caught) {
-//					updatingLabel.setVisible(false);
-//					failureLabel.setVisible(true);
-//					}
-//		
-//					@Override
-//					public void onSuccess(List<Student> studentList) {
-//						updatingLabel.setVisible(false);
-//						for(Student s : studentList){
-//							StudentPanel newStudPanel = new StudentPanel(s, mainPanel, assessmentPanel);
-//							studentListPanel.add(newStudPanel, s.getName());
-//							}
-//						if(!studentList.isEmpty()){
-//							nextID = studentList.get(0).getID() + 1;
-//						}
-//					}
-//
-//		});
-//	}
+	private void updateStudentList() {
+		if(updatingLabel.isVisible()){
+			return;
+		}
+		updatingLabel.setVisible(true);
+		failureLabel.setVisible(false);
+		studentStore.getStudents(nextID,
+				new AsyncCallback<List<Student>>(){
+
+					@Override
+					public void onFailure(Throwable caught) {
+					updatingLabel.setVisible(false);
+					failureLabel.setVisible(true);
+					}
+		
+					@Override
+					public void onSuccess(List<Student> studentList) {
+						updatingLabel.setVisible(false);
+						for(Student s : studentList){
+							StudentPanel newStudPanel = new StudentPanel(s, mainPanel, assessmentPanel);
+							studentListPanel.add(newStudPanel, s.getName());
+							}
+						if(!studentList.isEmpty()){
+							nextID = studentList.get(0).getID() + 1;
+						}
+					}
+
+		});
+	}
 }
