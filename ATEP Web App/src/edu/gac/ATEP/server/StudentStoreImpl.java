@@ -12,6 +12,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import edu.gac.ATEP.shared.StudentStore;
 import edu.gac.ATEP.shared.Student;
+import edu.gac.ATEP.shared.Assessment;
 
 public class StudentStoreImpl extends RemoteServiceServlet implements
  StudentStore {
@@ -36,8 +37,16 @@ public class StudentStoreImpl extends RemoteServiceServlet implements
 		query.setFilter("ID >= minimumID");
 		query.setOrdering("ID descending");
 		@SuppressWarnings("unchecked")
-		List<Student> students = (List<Student>) query.execute(minimumID);
-		return new ArrayList<Student>(students);
+		List<Student> students = new ArrayList<Student>((List<Student>) query.execute(minimumID));
+		for(Student s : students){
+			ArrayList<Assessment> assessments = 
+					new ArrayList<Assessment>(pm.detachCopyAll(s.getMyAssessments()));
+			for(Assessment a : assessments){
+				a.setOwner(s);
+			}
+			s.setMyAssessments(assessments);
+		}
+		return students;
 	}
 
 }

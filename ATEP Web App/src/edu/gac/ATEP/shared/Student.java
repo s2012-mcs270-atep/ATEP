@@ -20,7 +20,7 @@ public class Student extends User implements Serializable {
 	private Long ID;
 	@Persistent
 	private int classYear;
-	@Persistent(serialized="true")
+	@Persistent(mappedBy="owner")
 	private ArrayList<Assessment> myAssessments;
 	
 	
@@ -56,5 +56,9 @@ public class Student extends User implements Serializable {
 
 	public Long getID() {
 		return ID;
+	}
+
+	public void setMyAssessments(ArrayList<Assessment> assessments) {
+		myAssessments = assessments;
 	}
 }

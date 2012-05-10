@@ -1,9 +1,14 @@
 package edu.gac.ATEP.shared;
+import javax.jdo.annotations.IdentityType;
+import javax.jdo.annotations.PersistenceCapable;
+import javax.jdo.annotations.Persistent;
 import javax.swing.JCheckBox;
 import java.util.ArrayList;
 import java.io.Serializable;
 
+@PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class AssessmentTemplate implements Serializable {
+	@Persistent
 	private String name;
 	private ArrayList<Category> categories;
 
@@ -26,6 +31,10 @@ public class AssessmentTemplate implements Serializable {
 	
 	public int getClassYear() { 
 		return classYear;
+	}
+	
+	public ArrayList<Category> getCategories() {
+		return categories;
 	}
 	
 	@SuppressWarnings("unused") 

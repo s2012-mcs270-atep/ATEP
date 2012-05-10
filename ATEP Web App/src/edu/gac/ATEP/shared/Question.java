@@ -1,15 +1,21 @@
 package edu.gac.ATEP.shared;
 
 public class Question {
-	private Category category; //possibly change to class instead of String
 	private String bodyText;
 	private int score; // not used for template
 // each assessment has multiple Questions
 	
-	public Question(Category category, String bodyText) {
-		this.category = category;
+	public Question(String bodyText) {
 		this.bodyText = bodyText;
 		// score not initialized to prevent false results
+	}
+
+	public String getBodyText() {
+		return bodyText;
+	}
+
+	public void setBodyText(String bodyText) {
+		this.bodyText = bodyText;
 	}
 
 	public void setScore(int score2) {
