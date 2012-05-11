@@ -185,6 +185,7 @@ public class ATEP_Web_App implements EntryPoint {
 			new AsyncCallback<Void>(){
 				@Override
 				public void onFailure(Throwable caught) {
+					caught.printStackTrace();
 					failureLabel.setVisible(true);
 				}
 	

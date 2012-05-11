@@ -11,6 +11,10 @@ import javax.jdo.annotations.PrimaryKey;
 
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Category implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@PrimaryKey
 	@Persistent
 	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")

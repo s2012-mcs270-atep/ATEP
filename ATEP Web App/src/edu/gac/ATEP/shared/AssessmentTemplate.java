@@ -21,7 +21,7 @@ public class AssessmentTemplate implements Serializable {
 
 	private int classYear; // used to determine who should take this assessment
 	
-	private static final long serialVersionID = 1L; 
+	private static final long serialVersionUID = 1L; 
 
 	public AssessmentTemplate(String name, ArrayList<Category> categories, int classYear) {
 		this.name = name;
