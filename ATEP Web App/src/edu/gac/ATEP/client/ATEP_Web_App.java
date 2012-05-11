@@ -3,7 +3,6 @@ package edu.gac.ATEP.client;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.gac.ATEP.client.StudentPanel.rtslHandler;
 import edu.gac.ATEP.shared.Assessment;
 import edu.gac.ATEP.shared.AssessmentTempStore;
 import edu.gac.ATEP.shared.AssessmentTempStoreAsync;
@@ -36,6 +35,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.widget.client.TextButton;
 import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.StackPanel;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -76,7 +76,7 @@ public class ATEP_Web_App implements EntryPoint {
 		final Button removeStudentButton = new Button("Remove Student");
 		final Button addAssessmentTemplateButton = new Button("Add New Assessment Template");
 		final Button removeAssessmentTemplateButton = new Button("Remove Assessment Template");
-		final Button rtslButton = new Button("Return to Student List");
+		final Button studListButton = new Button("Student List");
 		
 		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
@@ -110,6 +110,7 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.add(errorLabel);
 		
 		assessmentPanel = new VerticalPanel();
+		assessmentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		adminPanel = new VerticalPanel();
 		menuPanel = new HorizontalPanel();
 		adminPanel.add(new Label("Administrator Menu"));
@@ -118,10 +119,11 @@ public class ATEP_Web_App implements EntryPoint {
 		menuPanel.add(removeStudentButton);
 		menuPanel.add(addAssessmentTemplateButton);
 		menuPanel.add(removeAssessmentTemplateButton);
-		menuPanel.add(rtslButton);
+		menuPanel.add(studListButton);
 		
 		//set up updating and failure labels
 		final HorizontalPanel statusPanel = new HorizontalPanel();
+		statusPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		statusPanel.setHeight("3em");
 		updatingLabel = new Label("Updating...");
 		updatingLabel.setVisible(false);
@@ -132,26 +134,26 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.add(statusPanel);
 		
 		//TODO This code is redundant, but all i could think of at the time.  Lets make it more efficient.
-////////////////////////////////Create a handler for the rtslButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-		class rtslHandler implements ClickHandler {
-			//fired when the user clicks on the rtslButton.
+////////////////////////////////Create a handler for the studListButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class studListHandler implements ClickHandler {
+			//fired when the user clicks on the studListButton.
 			public void onClick(ClickEvent event){
 				mainPanel.setVisible(true);
 				adminPanel.setVisible(true);
 				assessmentPanel.setVisible(false);
 			}
 		}
-		rtslHandler goBack = new rtslHandler();
-		rtslButton.addClickHandler(goBack);
+		studListHandler goBack = new studListHandler();
+		studListButton.addClickHandler(goBack);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
 		rootPanel.add(adminPanel);
-		rootPanel.add(mainPanel, 10, 58);
-		mainPanel.setSize("422px", "151px");
-		rootPanel.add(assessmentPanel, 10, 58);
-		assessmentPanel.setSize("422px", "18px");
+		rootPanel.add(mainPanel);
+		mainPanel.setSize("775px", "151px");
+		rootPanel.add(assessmentPanel);
+		assessmentPanel.setSize("775px", "18px");
 
 		assessmentPanel.setVisible(false);
 		adminPanel.setVisible(true);
@@ -163,11 +165,11 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
-		studentListPanel.setWidth("420px");
+		studentListPanel.setWidth("775px");
 		
 		StackPanel assessmentTemplatePanel = new StackPanel();
 		mainPanel.add(assessmentTemplatePanel);
-		assessmentTemplatePanel.setSize("418px", "54px");
+		assessmentTemplatePanel.setSize("775px", "54px");
 		
 		Label lblAssessmentList = new Label("Assessments");
 		lblAssessmentList.setWidth("240px");
