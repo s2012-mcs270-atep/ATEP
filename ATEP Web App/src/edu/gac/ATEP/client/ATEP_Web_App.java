@@ -3,6 +3,7 @@ package edu.gac.ATEP.client;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.gac.ATEP.client.StudentPanel.rtslHandler;
 import edu.gac.ATEP.shared.Assessment;
 import edu.gac.ATEP.shared.AssessmentTempStore;
 import edu.gac.ATEP.shared.AssessmentTempStoreAsync;
@@ -44,8 +45,10 @@ public class ATEP_Web_App implements EntryPoint {
 	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
 	private ArrayList<Student> currentStudents;
 	private StackPanel studentListPanel;
-	private VerticalPanel assessmentInfoPanel;
+	private HorizontalPanel menuPanel;
+	private VerticalPanel adminPanel;
 	private VerticalPanel mainPanel;
+	private VerticalPanel assessmentInfoPanel;
 	private VerticalPanel assessmentPanel;
 	private ArrayList<VerticalPanel> studentInfoPanels;
 	private ArrayList<VerticalPanel> assessmentInfoPanels;
@@ -68,11 +71,15 @@ public class ATEP_Web_App implements EntryPoint {
 	public void onModuleLoad() {
 		final Label errorLabel = new Label();
 		errorLabel.addStyleName("error");
-		//final Button viewButton = new Button("View");				
+		//final Button viewButton = new Button("View");	
+		final Button addStudentButton = new Button("Add New Student");
+		final Button removeStudentButton = new Button("Remove Student");
+		final Button addAssessmentTemplateButton = new Button("Add New Assessment Template");
+		final Button removeAssessmentTemplateButton = new Button("Remove Assessment Template");
+		final Button rtslButton = new Button("Return to Student List");
 		
 		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
-		
 		
 		ArrayList<Category> categoriesBones = new ArrayList<Category>();
 		ArrayList<Question> questionsBones = new ArrayList<Question>();
@@ -103,6 +110,15 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.add(errorLabel);
 		
 		assessmentPanel = new VerticalPanel();
+		adminPanel = new VerticalPanel();
+		menuPanel = new HorizontalPanel();
+		adminPanel.add(new Label("Administrator Menu"));
+		adminPanel.add(menuPanel);
+		menuPanel.add(addStudentButton);
+		menuPanel.add(removeStudentButton);
+		menuPanel.add(addAssessmentTemplateButton);
+		menuPanel.add(removeAssessmentTemplateButton);
+		menuPanel.add(rtslButton);
 		
 		//set up updating and failure labels
 		final HorizontalPanel statusPanel = new HorizontalPanel();
@@ -114,12 +130,31 @@ public class ATEP_Web_App implements EntryPoint {
 		statusPanel.add(updatingLabel);
 		statusPanel.add(failureLabel);
 		mainPanel.add(statusPanel);
+		
+		//TODO This code is redundant, but all i could think of at the time.  Lets make it more efficient.
+////////////////////////////////Create a handler for the rtslButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class rtslHandler implements ClickHandler {
+			//fired when the user clicks on the rtslButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(true);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+			}
+		}
+		rtslHandler goBack = new rtslHandler();
+		rtslButton.addClickHandler(goBack);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
-		rootPanel.add(mainPanel);
-		rootPanel.add(assessmentPanel);
+		rootPanel.add(adminPanel);
+		rootPanel.add(mainPanel, 10, 58);
+		mainPanel.setSize("422px", "151px");
+		rootPanel.add(assessmentPanel, 10, 58);
+		assessmentPanel.setSize("422px", "18px");
+
+		assessmentPanel.setVisible(false);
+		adminPanel.setVisible(true);
 		
 		//Add rest of panel structure
 		Label lblSearchStudents = new Label("Search Students");
@@ -129,8 +164,6 @@ public class ATEP_Web_App implements EntryPoint {
 		studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
 		studentListPanel.setWidth("420px");
-		
-		assessmentPanel.setVisible(false);
 		
 		StackPanel assessmentTemplatePanel = new StackPanel();
 		mainPanel.add(assessmentTemplatePanel);
@@ -146,7 +179,6 @@ public class ATEP_Web_App implements EntryPoint {
 		studentInfoPanels = new ArrayList<VerticalPanel>();
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		currentStudents = new ArrayList<Student>();
-		
 		
 		
 		studentStore.storeStudent(harry, 
@@ -198,6 +230,7 @@ public class ATEP_Web_App implements EntryPoint {
 
 //		private void constructStudentPanels(List<Student> newStudentList) {
 //			VerticalPanel studentInfoPanel;
+
 			for(Student s : studentList){
 				StudentPanel newStudPanel = new StudentPanel(s, mainPanel, assessmentPanel);
 				studentListPanel.add(newStudPanel, s.getName());
