@@ -16,8 +16,10 @@ public class Category implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	@PrimaryKey
-	@Persistent
+	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	@Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+	private String key;
+	@Persistent
 	private String name;
 	@Persistent
 	private ArrayList<Question> questions;
@@ -42,4 +44,7 @@ public class Category implements Serializable{
 	public String getName(){
 		return name;
 	}
+	
+	@SuppressWarnings("unused")
+	private Category(){}
 }

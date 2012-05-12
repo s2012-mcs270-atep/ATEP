@@ -41,6 +41,6 @@ public class Question implements Serializable {
 		score = score2;
 	}
 	
-	
-
+	@SuppressWarnings("unused")
+	private Question(){}
 }
