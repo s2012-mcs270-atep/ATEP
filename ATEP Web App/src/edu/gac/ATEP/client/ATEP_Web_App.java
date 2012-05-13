@@ -182,6 +182,17 @@ public class ATEP_Web_App implements EntryPoint {
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		currentStudents = new ArrayList<Student>();
 		
+		assessmentStore.storeAssessmentTemplate(bonesTemplate, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.printStackTrace();
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+					}
+				});
 		
 		studentStore.storeStudent(harry, 
 			new AsyncCallback<Void>(){
