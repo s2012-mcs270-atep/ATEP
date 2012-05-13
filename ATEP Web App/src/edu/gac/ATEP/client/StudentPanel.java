@@ -106,6 +106,17 @@ public class StudentPanel extends VerticalPanel{
 		}
 	}
 	
+	private void saveState(Assessment assessmentToSave) {
+	ArrayList<Category> cats = assessmentToSave.getCategories();
+	for (Category cat : cats){
+		ArrayList<Question> Qs = cat.getQuestions();
+		for (Question q : Qs){ 
+			if (q.getBodyText() == )
+		}
+			
+		}
+		
+	}
 	private void initGUI() {
 		this.add(new Label("Year in program: " + stud.getClassYear()));
 		this.add(new Button("Delete this student"));
