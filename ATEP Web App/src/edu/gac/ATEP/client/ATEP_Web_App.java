@@ -99,11 +99,11 @@ public class ATEP_Web_App implements EntryPoint {
 
 		Student harry = new Student("Harry", 2);
 		Student mary = new Student("Mary", 3);
-		harry.addAssessment(new Assessment(bonesTemplate, harry));
-		mary.addAssessment(new Assessment(bonesTemplate, mary));
-		mary.addAssessment(new Assessment(faceTemplate, mary));
-		studentList.add(harry);
-		studentList.add(mary);
+		//harry.addAssessment(new Assessment(bonesTemplate, harry));
+		//mary.addAssessment(new Assessment(bonesTemplate, mary));
+		//mary.addAssessment(new Assessment(faceTemplate, mary));
+		//studentList.add(harry);
+		//studentList.add(mary);
 		
 		// Create main panel to hold the widgets together
 		mainPanel = new VerticalPanel();
