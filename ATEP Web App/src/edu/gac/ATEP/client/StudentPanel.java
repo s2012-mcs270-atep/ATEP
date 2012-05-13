@@ -77,6 +77,7 @@ public class StudentPanel extends VerticalPanel{
 				VerticalPanel catPanel = new VerticalPanel();
 				ArrayList<Question> Qs = cat.getQuestions();
 				Label catLabel = new Label(cat.getName());
+				catLabel.addStyleName("label");
 				catPanel.add(catLabel);
 				for (Question q : Qs){
 					VerticalPanel questionPanel = new VerticalPanel();
