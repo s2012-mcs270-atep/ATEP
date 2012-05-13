@@ -22,6 +22,7 @@ public class StudentPanel extends VerticalPanel{
 	private static VerticalPanel panel2;
 	private VerticalPanel populatedPanel = new VerticalPanel();
 	ArrayList<Assessment> assessments;
+	ArrayList<RadioButton> buttons; 
 	
 	public StudentPanel(Student stud, VerticalPanel panel1, VerticalPanel panel2){
 		super();
@@ -73,6 +74,7 @@ public class StudentPanel extends VerticalPanel{
 			//create getCategories
 			//VerticalPanel viewAssessmentPanel = new VerticalPanel();
 			ArrayList<Category> cats = assessmentToPopulate.getCategories();
+			ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
 			for (Category cat : cats){
 				VerticalPanel catPanel = new VerticalPanel();
 				ArrayList<Question> Qs = cat.getQuestions();
@@ -83,18 +85,16 @@ public class StudentPanel extends VerticalPanel{
 					VerticalPanel questionPanel = new VerticalPanel();
 					HorizontalPanel scorePanel = new HorizontalPanel();
 					Label questionLabel = new Label(q.getBodyText());
-					RadioButton zero = new RadioButton(q.getBodyText(), "0");
-					RadioButton one = new RadioButton(q.getBodyText(), "1");
-					RadioButton two = new RadioButton(q.getBodyText(), "2");
-					RadioButton three = new RadioButton(q.getBodyText(), "3");
-					RadioButton four = new RadioButton(q.getBodyText(), "4");
-					RadioButton five = new RadioButton(q.getBodyText(), "5");
-					scorePanel.add(zero);
-					scorePanel.add(one);
-					scorePanel.add(two);
-					scorePanel.add(three);
-					scorePanel.add(four);
-					scorePanel.add(five);
+					for (int i = 0; i < 6; i++){ 
+						
+						RadioButton b = new RadioButton(q.getBodyText(), "" + i);
+						if (q.getScore() == i) { 
+							b.setChecked(true); 
+						}
+						scorePanel.add(b);
+						buttons.add(b);
+						
+					}
 					questionPanel.add(questionLabel);
 					questionPanel.add(scorePanel);
 					catPanel.add(questionPanel);
@@ -107,16 +107,25 @@ public class StudentPanel extends VerticalPanel{
 		}
 	}
 	
-	private void saveState(Assessment assessmentToSave) {
-	ArrayList<Category> cats = assessmentToSave.getCategories();
-	for (Category cat : cats){
-		ArrayList<Question> Qs = cat.getQuestions();
-		for (Question q : Qs){ 
-			if (q.getBodyText() == )
-		}
-			
-		}
-		
+    @SuppressWarnings("deprecation")
+	private void saveState(Assessment assessmentToSave) { 
+    	ArrayList<Category> cats = assessmentToSave.getCategories();
+    	for (Category cat : cats){
+			VerticalPanel catPanel = new VerticalPanel();
+			ArrayList<Question> Qs = cat.getQuestions();
+			Label catLabel = new Label(cat.getName());
+			catLabel.addStyleName("label");
+			catPanel.add(catLabel);
+			for (Question q : Qs){
+				for (RadioButton b : buttons) { 
+					if (b.isChecked() && q.getBodyText() == b.getName()) { 
+						q.setScore(Integer.parseInt(b.getText()));
+						
+					}
+				} 
+			} 
+    	}
+    
 	}
 	private void initGUI() {
 		this.add(new Label("Year in program: " + stud.getClassYear()));
