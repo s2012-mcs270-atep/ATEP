@@ -43,6 +43,17 @@ public class StudentPanel extends VerticalPanel{
 			panel2.remove(populatedPanel);
 		}
 	}
+	class saveHandler implements ClickHandler {
+		private Assessment assessmentToSave;
+		//fired when the user clicks on the rtslButton.
+		public saveHandler(Assessment a) { 
+			assessmentToSave = a; 
+		}
+		public void onClick(ClickEvent event){
+			((StudentPanel) populatedPanel).saveState(assessmentToSave);
+			
+		}
+	}
 	
 ///////////////////////////////Create a handler for the ViewAssessmentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 	class ViewAssessmentHandler implements ClickHandler{
@@ -58,8 +69,11 @@ public class StudentPanel extends VerticalPanel{
 			panel2.clear();	//specifically removes redundant "Return to Student List" buttons.
 			populatedPanel.clear();	//specifically removes the catigories and questions.
 			final Button rtslButton = new Button("Return to Student List");
+			final Button saveButton = new Button("Save Progress");
 			panel2.add(rtslButton);
+			panel2.add(saveButton);
 			rtslHandler goBack = new rtslHandler();
+			saveHandler save  = new saveHandler(assessmentToView); 
 			rtslButton.addClickHandler(goBack);
 			populatePanel(assessmentToView);
 			panel2.setVisible(true);
