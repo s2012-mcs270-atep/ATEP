@@ -56,6 +56,8 @@ public class ATEP_Web_App implements EntryPoint {
 	
 	private Label updatingLabel;
 	private Label failureLabel;
+	private Label failureLabel2;
+	private Label tempFailLabel;
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
@@ -127,10 +129,16 @@ public class ATEP_Web_App implements EntryPoint {
 		statusPanel.setHeight("3em");
 		updatingLabel = new Label("Updating...");
 		updatingLabel.setVisible(false);
-		failureLabel = new Label("Lost connection to server.");
+		failureLabel = new Label("Lost connection to server -- harry.");
 		failureLabel.setVisible(false);
+		failureLabel2 = new Label("Lost connection to server -- mary.");
+		failureLabel2.setVisible(false);
+		tempFailLabel = new Label("Lost connection to server while storing assessment templates.");
+		tempFailLabel.setVisible(false);
 		statusPanel.add(updatingLabel);
 		statusPanel.add(failureLabel);
+		statusPanel.add(failureLabel2);
+		statusPanel.add(tempFailLabel);
 		mainPanel.add(statusPanel);
 		
 		//TODO This code is redundant, but all i could think of at the time.  Lets make it more efficient.
@@ -182,6 +190,29 @@ public class ATEP_Web_App implements EntryPoint {
 		assessmentInfoPanels = new ArrayList<VerticalPanel>();
 		currentStudents = new ArrayList<Student>();
 		
+		assessmentStore.storeAssessmentTemplate(bonesTemplate, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.printStackTrace();
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+					}
+				});
+		
+		assessmentStore.storeAssessmentTemplate(faceTemplate, 
+				new AsyncCallback<Void>(){
+					@Override
+					public void onFailure(Throwable caught) {
+						caught.printStackTrace();
+					}
+		
+					@Override
+					public void onSuccess(Void result) {
+					}
+				});
 		
 		studentStore.storeStudent(harry, 
 			new AsyncCallback<Void>(){
@@ -202,12 +233,12 @@ public class ATEP_Web_App implements EntryPoint {
 				new AsyncCallback<Void>(){
 					@Override
 					public void onFailure(Throwable caught) {
-						failureLabel.setVisible(true);
+						failureLabel2.setVisible(true);
 					}
 		
 					@Override
 					public void onSuccess(Void result) {
-						failureLabel.setVisible(false);
+						failureLabel2.setVisible(false);
 						updateStudentList();
 					}
 				});
