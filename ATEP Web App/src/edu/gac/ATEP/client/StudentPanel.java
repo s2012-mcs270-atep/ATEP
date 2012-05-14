@@ -67,7 +67,7 @@ public class StudentPanel extends VerticalPanel{
 		public void onClick(ClickEvent event){
 			panel1.setVisible(false);	
 			panel2.clear();	//specifically removes redundant "Return to Student List" buttons.
-			populatedPanel.clear();	//specifically removes the catigories and questions.
+			populatedPanel.clear();	//specifically removes the categories and questions.
 			final Button rtslButton = new Button("Return to Student List");
 			final Button saveButton = new Button("Save Progress");
 			panel2.add(rtslButton);
@@ -75,6 +75,7 @@ public class StudentPanel extends VerticalPanel{
 			rtslHandler goBack = new rtslHandler();
 			saveHandler save  = new saveHandler(assessmentToView); 
 			rtslButton.addClickHandler(goBack);
+			saveButton.addClickHandler(save);
 			populatePanel(assessmentToView);
 			panel2.setVisible(true);
 		}
