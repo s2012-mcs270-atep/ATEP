@@ -85,6 +85,7 @@ public class StudentPanel extends VerticalPanel{
 
 
 		//Send the name selected from the student list to the server and wait for a response.
+		@SuppressWarnings("deprecation")
 		private void populatePanel(Assessment assessmentToPopulate) {
 			//create getCategories
 			//VerticalPanel viewAssessmentPanel = new VerticalPanel();

@@ -41,8 +41,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
-	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
 	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
+	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
 	private ArrayList<Student> currentStudents;
 	private StackPanel studentListPanel;
 	private HorizontalPanel menuPanel;
