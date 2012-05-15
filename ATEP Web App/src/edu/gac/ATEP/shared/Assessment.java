@@ -10,6 +10,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.gwt.user.client.ui.Label;
+
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Assessment implements Serializable {
 	@SuppressWarnings("unused")
@@ -42,21 +44,22 @@ public class Assessment implements Serializable {
 	public String getName() {
 		return name;
 	}
-	
 	public String getStatus() {
+		String notStarted = new String("Not Started");
+		String inProgress = new String("In Progress");
+		String complete = new String("Complete");
 		if (status == 0) {
-			return "Not Started";
+			return notStarted;
 		} else if (status == 1) {
-			return "In Progress";
+			return inProgress;
 		} else {
-			return "Complete";
+			return complete;
 		}
 	}
 	public int getClassYear() { 
 		return classYear; 
 		
 	}
-	
 	public void setInProgress() { 
 		status = 1;
 	}
@@ -84,6 +87,4 @@ public class Assessment implements Serializable {
 		owner = s;
 		
 	}
-
-	}
-
+}

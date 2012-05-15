@@ -21,6 +21,15 @@ h1 {
   font-weight: bold;
 }
 
+.notStarted {
+	font-weight: bold;
+	}
+	
+.assessment {
+	text-align: justify;
+	text-justify: inter-word;
+}
+
 .dialogVPanel {
   margin: 5px;
 }

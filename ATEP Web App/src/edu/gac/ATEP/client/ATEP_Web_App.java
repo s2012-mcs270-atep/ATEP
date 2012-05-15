@@ -23,11 +23,13 @@ import com.google.gwt.event.dom.client.KeyUpEvent;
 import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -41,8 +43,8 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
-	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
 	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
+	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
 	private ArrayList<Student> currentStudents;
 	private StackPanel studentListPanel;
 	private HorizontalPanel menuPanel;
@@ -50,6 +52,8 @@ public class ATEP_Web_App implements EntryPoint {
 	private VerticalPanel mainPanel;
 	private VerticalPanel assessmentInfoPanel;
 	private VerticalPanel assessmentPanel;
+	private VerticalPanel addStudentPanel;
+	private VerticalPanel removeStudentPanel;
 	private ArrayList<VerticalPanel> studentInfoPanels;
 	private ArrayList<VerticalPanel> assessmentInfoPanels;
 	private Long nextID = 1L; //TODO change if appropriate
@@ -77,6 +81,7 @@ public class ATEP_Web_App implements EntryPoint {
 		final Button addAssessmentTemplateButton = new Button("Add New Assessment Template");
 		final Button removeAssessmentTemplateButton = new Button("Remove Assessment Template");
 		final Button studListButton = new Button("Student List");
+		final Button removeTheseStudentsButton = new Button("Remove (these) Student(s)");
 		
 		//stuff for testing
 		ArrayList<Student> studentList = new ArrayList<Student>();
@@ -113,13 +118,31 @@ public class ATEP_Web_App implements EntryPoint {
 		assessmentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		adminPanel = new VerticalPanel();
 		menuPanel = new HorizontalPanel();
+		addStudentPanel = new VerticalPanel();
+		removeStudentPanel = new VerticalPanel();
 		adminPanel.add(new Label("Administrator Menu"));
 		adminPanel.add(menuPanel);
+		
 		menuPanel.add(addStudentButton);
 		menuPanel.add(removeStudentButton);
 		menuPanel.add(addAssessmentTemplateButton);
 		menuPanel.add(removeAssessmentTemplateButton);
 		menuPanel.add(studListButton);
+		
+		Label addStudentLabel = new Label("Enter the Gustavus email address of the student you would like to add: ");
+		addStudentPanel.add(addStudentLabel);
+		TextBox textBox = new TextBox();
+		addStudentPanel.add(textBox);
+		textBox.setWidth("211px");
+		
+		Label removeStudentLabel = new Label("Please select the student(s) from the list that you would like to remove: ");
+		removeStudentPanel.add(removeStudentLabel);
+		for(Student s : studentList){
+			HorizontalPanel studentToRemove = new HorizontalPanel();
+			studentToRemove.add(new CheckBox(s.getName()));
+			removeStudentPanel.add(studentToRemove);
+		}
+		removeStudentPanel.add(removeTheseStudentsButton);
 		
 		//set up updating and failure labels
 		final HorizontalPanel statusPanel = new HorizontalPanel();
@@ -141,10 +164,40 @@ public class ATEP_Web_App implements EntryPoint {
 				mainPanel.setVisible(true);
 				adminPanel.setVisible(true);
 				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(false);
 			}
 		}
 		studListHandler goBack = new studListHandler();
 		studListButton.addClickHandler(goBack);
+		
+////////////////////////////////Create a handler for the addStudentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class addStudentHandler implements ClickHandler {
+			//fired when the user clicks on the studListButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(true);
+				removeStudentPanel.setVisible(false);
+			}
+		}
+		addStudentHandler addStud = new addStudentHandler();
+		addStudentButton.addClickHandler(addStud);
+		
+////////////////////////////////Create a handler for the removeStudentButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		class removeStudentHandler implements ClickHandler {
+			//fired when the user clicks on the studListButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(true);
+			}
+		}
+		removeStudentHandler removeStudent = new removeStudentHandler();
+		removeStudentButton.addClickHandler(removeStudent);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
@@ -154,25 +207,21 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel.setSize("775px", "151px");
 		rootPanel.add(assessmentPanel);
 		assessmentPanel.setSize("775px", "18px");
+		rootPanel.add(addStudentPanel);
+		addStudentPanel.setSize("775px", "18px");
+		rootPanel.add(removeStudentPanel);
+		removeStudentPanel.setSize("775px", "18px");
 
 		assessmentPanel.setVisible(false);
 		adminPanel.setVisible(true);
+		addStudentPanel.setVisible(false);
+		removeStudentPanel.setVisible(false);
 		
 		//Add rest of panel structure
-		Label lblSearchStudents = new Label("Search Students");
-		mainPanel.add(lblSearchStudents);
-		lblSearchStudents.setWidth("420px");
-		
+		mainPanel.add(new Label("Search Students"));
 		studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
 		studentListPanel.setWidth("775px");
-		
-		StackPanel assessmentTemplatePanel = new StackPanel();
-		mainPanel.add(assessmentTemplatePanel);
-		assessmentTemplatePanel.setSize("775px", "54px");
-		
-		Label lblAssessmentList = new Label("Assessments");
-		lblAssessmentList.setWidth("240px");
 		
 //		StackPanel assessmentListPanel = new StackPanel();
 //		assessmentListPanel.setWidth("240px");
