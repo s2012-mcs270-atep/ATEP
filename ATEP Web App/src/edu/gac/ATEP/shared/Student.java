@@ -22,43 +22,43 @@ public class Student extends User implements Serializable {
 	private int classYear;
 	@Persistent(mappedBy="owner")
 	private ArrayList<Assessment> myAssessments;
-	
-	
+
+
 	public Student(String n, int cY) {
 		super(n);
 		classYear = cY;
 		myAssessments = new ArrayList<Assessment>();
 	}
-	
+
 	public int getClassYear() {
 		return classYear;
 	}
-	
+
 	public void addAssessment(Assessment a) {
 		myAssessments.add(a);
 	}
-	
+
 	public ArrayList<Assessment> getMyAssessments() {
 		if (myAssessments == null) {
 			return new ArrayList<Assessment>();
 		}
 		return myAssessments;
 	}
-	
-	public String toString() {
-		return super.toString() + " -- Year in Program: " + classYear;
-	}
-	
-	@SuppressWarnings("unused")
-	private Student(){
-		super();
+
+	public void setMyAssessments(ArrayList<Assessment> assessments) {
+		myAssessments = assessments;
 	}
 
 	public Long getID() {
 		return ID;
 	}
 
-	public void setMyAssessments(ArrayList<Assessment> assessments) {
-		myAssessments = assessments;
+	public String toString() {
+		return super.toString() + " -- Year in Program: " + classYear;
+	}
+
+	@SuppressWarnings("unused")
+	private Student(){
+		super();
 	}
 }
