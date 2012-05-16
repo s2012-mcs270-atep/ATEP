@@ -43,10 +43,4 @@ public class Question implements Serializable {
 	
 	@SuppressWarnings("unused")
 	private Question(){}
-
-	public int getScore() {
-		// TODO Auto-generated method stub
-		return score;
-	}
-
 }

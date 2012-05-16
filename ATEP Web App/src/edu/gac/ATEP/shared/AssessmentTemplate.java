@@ -1,5 +1,5 @@
 package edu.gac.ATEP.shared;
-import javax.jdo.annotations.Extension;
+
 import javax.jdo.annotations.DiscriminatorStrategy;
 import javax.jdo.annotations.Discriminator;
 import javax.jdo.annotations.IdentityType;

@@ -28,5 +28,3 @@ public interface StudentStore extends RemoteService {
 	 */
 	public static final int INITIAL_LIMIT=10;
 }
-
-

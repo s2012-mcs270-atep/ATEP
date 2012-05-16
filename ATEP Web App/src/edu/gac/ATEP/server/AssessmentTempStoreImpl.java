@@ -49,6 +49,4 @@ public class AssessmentTempStoreImpl extends RemoteServiceServlet implements
 			List<AssessmentTemplate> assessmentTemplates = (List<AssessmentTemplate>) query.execute(minimumID);
 			return new ArrayList<AssessmentTemplate>(assessmentTemplates);
 		}
-	
-
 }

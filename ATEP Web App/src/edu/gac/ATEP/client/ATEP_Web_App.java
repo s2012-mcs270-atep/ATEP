@@ -1,39 +1,30 @@
 package edu.gac.ATEP.client;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 import edu.gac.ATEP.shared.Assessment;
-import edu.gac.ATEP.shared.AssessmentTempStore;
-import edu.gac.ATEP.shared.AssessmentTempStoreAsync;
 import edu.gac.ATEP.shared.AssessmentTemplate;
 import edu.gac.ATEP.shared.Category;
-import edu.gac.ATEP.shared.FieldVerifier;
 import edu.gac.ATEP.shared.Question;
 import edu.gac.ATEP.shared.Student;
-import edu.gac.ATEP.shared.StudentStore;
-import edu.gac.ATEP.shared.StudentStoreAsync;
+
+//import edu.gac.ATEP.shared.AssessmentTempStore;
+//import edu.gac.ATEP.shared.AssessmentTempStoreAsync;
+//import edu.gac.ATEP.shared.StudentStore;
+//import edu.gac.ATEP.shared.StudentStoreAsync;
+//import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyUpEvent;
-import com.google.gwt.event.dom.client.KeyUpHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DialogBox;
-import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.google.gwt.widget.client.TextButton;
-import com.google.gwt.user.client.ui.Grid;
 import com.google.gwt.user.client.ui.StackPanel;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 
@@ -41,30 +32,29 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
-	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
-	private final AssessmentTempStoreAsync assessmentStore = GWT.create(AssessmentTempStore.class);
-	private ArrayList<Student> currentStudents;
+	//Assessmentstore and Studentstore are declared below as they would need to be used for persistence. 
+//	private final AssessmentTempStoreAsync assessmentTempStore = GWT.create(AssessmentTempStore.class);
+//	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
+	
+	
 	private StackPanel studentListPanel;
 	private HorizontalPanel menuPanel;
 	private VerticalPanel adminPanel;
 	private VerticalPanel mainPanel;
-	private VerticalPanel assessmentInfoPanel;
 	private VerticalPanel assessmentPanel;
-	private ArrayList<VerticalPanel> studentInfoPanels;
-	private ArrayList<VerticalPanel> assessmentInfoPanels;
-	private Long nextID = 1L; //TODO change if appropriate
+	private VerticalPanel addStudentPanel;
+	private VerticalPanel removeStudentPanel;
+//	private Long nextID = 1L; //TODO change if appropriate
 	
-	private Label updatingLabel;
-	private Label failureLabel;
-	private Label failureLabel2;
-	private Label tempFailLabel;
+//	private Label updatingLabel;
+//	private Label failureLabel;
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.
 	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
+//	private static final String SERVER_ERROR = "An error occurred while "
+//			+ "attempting to contact the server. Please check your network "
+//			+ "connection and try again.";
 
 
 	/**
@@ -79,10 +69,12 @@ public class ATEP_Web_App implements EntryPoint {
 		final Button addAssessmentTemplateButton = new Button("Add New Assessment Template");
 		final Button removeAssessmentTemplateButton = new Button("Remove Assessment Template");
 		final Button studListButton = new Button("Student List");
+		final Button removeTheseStudentsButton = new Button("Remove (these) Student(s)");
 		
-		//stuff for testing
+		//STUFF FOR TESTING
 		ArrayList<Student> studentList = new ArrayList<Student>();
 		
+		//Create Sample Assessment Templates
 		ArrayList<Category> categoriesBones = new ArrayList<Category>();
 		ArrayList<Question> questionsBones = new ArrayList<Question>();
 		AssessmentTemplate bonesTemplate = new AssessmentTemplate("Bones Assessment", categoriesBones, 2);
@@ -98,14 +90,15 @@ public class ATEP_Web_App implements EntryPoint {
 		Question questionC1 = new Question("What's wrong with your face?");
 		questionsFace.add(questionC1);
 		categoriesFace.add(face);
-
+		
+		//Create Sample Students
 		Student harry = new Student("Harry", 2);
 		Student mary = new Student("Mary", 3);
-		//harry.addAssessment(new Assessment(bonesTemplate, harry));
-		//mary.addAssessment(new Assessment(bonesTemplate, mary));
-		//mary.addAssessment(new Assessment(faceTemplate, mary));
-		//studentList.add(harry);
-		//studentList.add(mary);
+		harry.addAssessment(new Assessment(bonesTemplate, harry));
+		mary.addAssessment(new Assessment(bonesTemplate, mary));
+		mary.addAssessment(new Assessment(faceTemplate, mary));
+		studentList.add(harry);
+		studentList.add(mary);
 		
 		// Create main panel to hold the widgets together
 		mainPanel = new VerticalPanel();
@@ -113,108 +106,131 @@ public class ATEP_Web_App implements EntryPoint {
 		
 		assessmentPanel = new VerticalPanel();
 		assessmentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		
 		adminPanel = new VerticalPanel();
-		menuPanel = new HorizontalPanel();
 		adminPanel.add(new Label("Administrator Menu"));
-		adminPanel.add(menuPanel);
+		
+		menuPanel = new HorizontalPanel();
 		menuPanel.add(addStudentButton);
 		menuPanel.add(removeStudentButton);
 		menuPanel.add(addAssessmentTemplateButton);
 		menuPanel.add(removeAssessmentTemplateButton);
 		menuPanel.add(studListButton);
+		adminPanel.add(menuPanel);
+		
+		addStudentPanel = new VerticalPanel();
+		Label addStudentLabel = new Label("Enter the Gustavus email address of the student you would like to add: ");
+		addStudentPanel.add(addStudentLabel);
+		TextBox textBox = new TextBox();
+		addStudentPanel.add(textBox);
+		textBox.setWidth("211px");
+		
+		removeStudentPanel = new VerticalPanel();
+		Label removeStudentLabel = new Label("Please select the student(s) from the list that you would like to remove: ");
+		removeStudentPanel.add(removeStudentLabel);
+		for(Student s : studentList){
+			HorizontalPanel studentToRemove = new HorizontalPanel();
+			studentToRemove.add(new CheckBox(s.getName()));
+			removeStudentPanel.add(studentToRemove);
+		}
+		removeStudentPanel.add(removeTheseStudentsButton);
+		
+		
+	//Status Panel allows the user to see when problems occur when using persistence. 
 		
 		//set up updating and failure labels
-		final HorizontalPanel statusPanel = new HorizontalPanel();
+/*		final HorizontalPanel statusPanel = new HorizontalPanel();
 		statusPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		statusPanel.setHeight("3em");
 		updatingLabel = new Label("Updating...");
 		updatingLabel.setVisible(false);
-		failureLabel = new Label("Lost connection to server -- harry.");
+		failureLabel = new Label("Lost connection to server.");
 		failureLabel.setVisible(false);
-		failureLabel2 = new Label("Lost connection to server -- mary.");
-		failureLabel2.setVisible(false);
-		tempFailLabel = new Label("Lost connection to server while storing assessment templates.");
-		tempFailLabel.setVisible(false);
 		statusPanel.add(updatingLabel);
 		statusPanel.add(failureLabel);
-		statusPanel.add(failureLabel2);
-		statusPanel.add(tempFailLabel);
-		mainPanel.add(statusPanel);
+		mainPanel.add(statusPanel);*/
 		
-		//TODO This code is redundant, but all i could think of at the time.  Lets make it more efficient.
-////////////////////////////////Create a handler for the studListButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+		
+		
+		//TODO This code is redundant, as it may be possible to implement one handler for all of the buttons 
+		// since they all have essentially the same goal, simply with a different panel shown upon completion. 
 		class studListHandler implements ClickHandler {
 			//fired when the user clicks on the studListButton.
 			public void onClick(ClickEvent event){
 				mainPanel.setVisible(true);
 				adminPanel.setVisible(true);
 				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(false);
 			}
 		}
 		studListHandler goBack = new studListHandler();
 		studListButton.addClickHandler(goBack);
+		
+
+		class addStudentHandler implements ClickHandler {
+			//fired when the user clicks on the studListButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(true);
+				removeStudentPanel.setVisible(false);
+			}
+		}
+		addStudentHandler addStud = new addStudentHandler();
+		addStudentButton.addClickHandler(addStud);
+		
+
+		class removeStudentHandler implements ClickHandler {
+			//fired when the user clicks on the studListButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(true);
+			}
+		}
+		removeStudentHandler removeStudent = new removeStudentHandler();
+		removeStudentButton.addClickHandler(removeStudent);
 
 		// Add the mainPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
 		rootPanel.add(adminPanel);
 		rootPanel.add(mainPanel);
-		mainPanel.setSize("775px", "151px");
 		rootPanel.add(assessmentPanel);
+		rootPanel.add(addStudentPanel);
+		rootPanel.add(removeStudentPanel);
+		mainPanel.setSize("775px", "151px");
 		assessmentPanel.setSize("775px", "18px");
+		addStudentPanel.setSize("775px", "18px");
+		removeStudentPanel.setSize("775px", "18px");
 
 		assessmentPanel.setVisible(false);
 		adminPanel.setVisible(true);
+		addStudentPanel.setVisible(false);
+		removeStudentPanel.setVisible(false);
 		
 		//Add rest of panel structure
-		Label lblSearchStudents = new Label("Search Students");
-		mainPanel.add(lblSearchStudents);
-		lblSearchStudents.setWidth("420px");
-		
+		mainPanel.add(new Label("Search Students"));
 		studentListPanel = new StackPanel();
 		mainPanel.add(studentListPanel);
 		studentListPanel.setWidth("775px");
 		
-		StackPanel assessmentTemplatePanel = new StackPanel();
-		mainPanel.add(assessmentTemplatePanel);
-		assessmentTemplatePanel.setSize("775px", "54px");
+		//This loop should be placed below the Persistence access code below once the datastore is successfully implemented. 
+		//At this stage we felt a more succinct organization would be to place it here. 
+		for(Student s : studentList){
+			StudentPanel newStudPanel = new StudentPanel(s, mainPanel, assessmentPanel);
+			studentListPanel.add(newStudPanel, s.getName());
+			
 		
-		Label lblAssessmentList = new Label("Assessments");
-		lblAssessmentList.setWidth("240px");
+		// Code for implementing the Persistence datastore. For the purpose of turning in an 
+		// aesthetically pleasing Interface, all information will be local
 		
-//		StackPanel assessmentListPanel = new StackPanel();
-//		assessmentListPanel.setWidth("240px");
-		
-		assessmentInfoPanel = new VerticalPanel();
-		studentInfoPanels = new ArrayList<VerticalPanel>();
-		assessmentInfoPanels = new ArrayList<VerticalPanel>();
-		currentStudents = new ArrayList<Student>();
-		
-		assessmentStore.storeAssessmentTemplate(bonesTemplate, 
-				new AsyncCallback<Void>(){
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.printStackTrace();
-					}
-		
-					@Override
-					public void onSuccess(Void result) {
-					}
-				});
-		
-		assessmentStore.storeAssessmentTemplate(faceTemplate, 
-				new AsyncCallback<Void>(){
-					@Override
-					public void onFailure(Throwable caught) {
-						caught.printStackTrace();
-					}
-		
-					@Override
-					public void onSuccess(Void result) {
-					}
-				});
-		
-		studentStore.storeStudent(harry, 
+		//Perhaps unnecessary and primitive code. We can leave it if you like. 
+/*	   	studentStore.storeStudent(harry, 
 			new AsyncCallback<Void>(){
 				@Override
 				public void onFailure(Throwable caught) {
@@ -233,53 +249,29 @@ public class ATEP_Web_App implements EntryPoint {
 				new AsyncCallback<Void>(){
 					@Override
 					public void onFailure(Throwable caught) {
-						failureLabel2.setVisible(true);
+						failureLabel.setVisible(true);
 					}
 		
 					@Override
 					public void onSuccess(Void result) {
-						failureLabel2.setVisible(false);
+						failureLabel.setVisible(false);
 						updateStudentList();
 					}
-				});
-		/*studentStore.getStudents(nextID,
-				new AsyncCallback<List<Student>>(){
-
-				@Override
-				public void onFailure(Throwable caught) {
-				}
-
-				@Override
-				public void onSuccess(List<Student> studentList) {
-					//Set up display of student list and list of assessments for each student
-					//populate student and assessment lists
-					constructStudentPanels(studentList);
-				
-				}
-
 				});*/
 
-		//if there are no students in the database, prompt to add students
-		//for now, just add manually
 
-//		private void constructStudentPanels(List<Student> newStudentList) {
-//			VerticalPanel studentInfoPanel;
+		
+		
 
-			for(Student s : studentList){
-				StudentPanel newStudPanel = new StudentPanel(s, mainPanel, assessmentPanel);
-				studentListPanel.add(newStudPanel, s.getName());
 			}
 		}
 	
 	
-	//TODO We need to figure out how we want to handle updates vs. displaying the updated list.  
-	// As you can see from Max's email, if we leave the project how it currently is, sometimes 
-	// on the first load, it won't display the students added to the database on startup.  This
-	// problem might go away once we implement assessors/admins adding students to the database
-	// instead of just doing it for them with default students on startup.  This method below
-	// will likely replace the storeStudent calls with harry and mary above.
+
+	
+	// This method is called each time a new student is added to the StudentList. 
 		
-	private void updateStudentList() {
+	/*private void updateStudentList() {
 		if(updatingLabel.isVisible()){
 			return;
 		}
@@ -307,5 +299,5 @@ public class ATEP_Web_App implements EntryPoint {
 					}
 
 		});
-	}
+	}*/
 }

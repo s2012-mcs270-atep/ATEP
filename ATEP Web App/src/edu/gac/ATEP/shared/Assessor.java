@@ -8,8 +8,5 @@ public class Assessor extends User {
 	
 	public void gradeQuestion(Question q, int score) {
 		q.setScore(score);
-	}
-	
-	
-	
+	}	
 }

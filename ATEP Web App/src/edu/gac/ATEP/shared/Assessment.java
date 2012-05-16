@@ -33,10 +33,7 @@ public class Assessment implements Serializable {
 		classYear = template.getClassYear(); 
 		this.owner = owner;
 		status = 0;
-		baseTemplate = template;
-		// have we accounted for all info. needed to initialize an assessment? 
-		// make a copy of appropriate assessment form for specified student owner
-	
+		baseTemplate = template;	
 	}
 	
 	public String getName() {
@@ -52,17 +49,16 @@ public class Assessment implements Serializable {
 			return "Complete";
 		}
 	}
+	
 	public int getClassYear() { 
-		return classYear; 
-		
+		return classYear; 	
 	}
 	
 	public void setInProgress() { 
 		status = 1;
 	}
 	public void setComplete() {
-		status = 2;
-		
+		status = 2;	
 	}
 	
 	public ArrayList<Category> getCategories() {
@@ -81,9 +77,6 @@ public class Assessment implements Serializable {
 	//methods for editing assessments go here? Or in Assessor class?
 
 	public void setOwner(Student s) {
-		owner = s;
-		
+		owner = s;	
 	}
-
-	}
-
+}

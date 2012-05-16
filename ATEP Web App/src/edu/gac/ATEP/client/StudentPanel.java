@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -18,40 +17,29 @@ import edu.gac.ATEP.shared.Question;
 public class StudentPanel extends VerticalPanel{
 	
 	private static Student stud;
-	private static VerticalPanel panel1;
-	private static VerticalPanel panel2;
+	private static VerticalPanel mainPanel;
+	private static VerticalPanel singleAssessmentPanel;
 	private VerticalPanel populatedPanel = new VerticalPanel();
 	ArrayList<Assessment> assessments;
-	ArrayList<RadioButton> buttons; 
 	
-	public StudentPanel(Student stud, VerticalPanel panel1, VerticalPanel panel2){
+	//constructor
+	public StudentPanel(Student stud, VerticalPanel mainPanel, VerticalPanel singleAssessmentPanel){
 		super();
 		this.stud = stud;
-		this.panel1 = panel1;
-		this.panel2 = panel2;
+		this.mainPanel = mainPanel;
+		this.singleAssessmentPanel = singleAssessmentPanel;
 		assessments = stud.getMyAssessments();
 		initGUI();
-		
 	}
 
 ////////////////////////////////Create a handler for the rtslButton\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+	//rtsl = Return To Student List
 	class rtslHandler implements ClickHandler {
 		//fired when the user clicks on the rtslButton.
 		public void onClick(ClickEvent event){
-			panel1.setVisible(true);
-			panel2.setVisible(false);
-			panel2.remove(populatedPanel);
-		}
-	}
-	class saveHandler implements ClickHandler {
-		private Assessment assessmentToSave;
-		//fired when the user clicks on the rtslButton.
-		public saveHandler(Assessment a) { 
-			assessmentToSave = a; 
-		}
-		public void onClick(ClickEvent event){
-			((StudentPanel) populatedPanel).saveState(assessmentToSave);
-			
+			mainPanel.setVisible(true);
+			singleAssessmentPanel.setVisible(false);
+			singleAssessmentPanel.remove(populatedPanel);
 		}
 	}
 	
@@ -65,88 +53,65 @@ public class StudentPanel extends VerticalPanel{
 		
 		//Fired when the user clicks on the ViewAssessmentButton.
 		public void onClick(ClickEvent event){
-			panel1.setVisible(false);	
-			panel2.clear();	//specifically removes redundant "Return to Student List" buttons.
+			mainPanel.setVisible(false);	
+			singleAssessmentPanel.clear();	//specifically removes redundant "Return to Student List" buttons.
 			populatedPanel.clear();	//specifically removes the categories and questions.
 			final Button rtslButton = new Button("Return to Student List");
-			final Button saveButton = new Button("Save Progress");
-			panel2.add(rtslButton);
-			panel2.add(saveButton);
+			singleAssessmentPanel.add(rtslButton);
 			rtslHandler goBack = new rtslHandler();
-			saveHandler save  = new saveHandler(assessmentToView); 
 			rtslButton.addClickHandler(goBack);
-			saveButton.addClickHandler(save);
 			populatePanel(assessmentToView);
-			panel2.setVisible(true);
+			singleAssessmentPanel.setVisible(true);
 		}
 		
 
-		// Add a handler to hide mainPanel and display assessmentPanel
-
-
-		//Send the name selected from the student list to the server and wait for a response.
-		@SuppressWarnings("deprecation")
+		//Method for populating the assessmentPanel (panel2) with categories and questions
 		private void populatePanel(Assessment assessmentToPopulate) {
-			//create getCategories
-			//VerticalPanel viewAssessmentPanel = new VerticalPanel();
 			ArrayList<Category> cats = assessmentToPopulate.getCategories();
-			ArrayList<RadioButton> buttons = new ArrayList<RadioButton>();
+			//Goes through list of categories and makes a new Panel & Label for each
 			for (Category cat : cats){
 				VerticalPanel catPanel = new VerticalPanel();
 				ArrayList<Question> Qs = cat.getQuestions();
 				Label catLabel = new Label(cat.getName());
 				catLabel.addStyleName("label");
 				catPanel.add(catLabel);
+				//Goes through list of questions in a specific category, creates a panel for the 
+				//question and the score buttons and adds to category panel (catPanel)
 				for (Question q : Qs){
 					VerticalPanel questionPanel = new VerticalPanel();
 					HorizontalPanel scorePanel = new HorizontalPanel();
 					Label questionLabel = new Label(q.getBodyText());
-					for (int i = 0; i < 6; i++){ 
-						
-						RadioButton b = new RadioButton(q.getBodyText(), "" + i);
-						if (q.getScore() == i) { 
-							b.setChecked(true); 
-						}
-						scorePanel.add(b);
-						buttons.add(b);
-						
-					}
+					RadioButton zero = new RadioButton(q.getBodyText(), "0");
+					RadioButton one = new RadioButton(q.getBodyText(), "1");
+					RadioButton two = new RadioButton(q.getBodyText(), "2");
+					RadioButton three = new RadioButton(q.getBodyText(), "3");
+					RadioButton four = new RadioButton(q.getBodyText(), "4");
+					RadioButton five = new RadioButton(q.getBodyText(), "5");
+					scorePanel.add(zero);
+					scorePanel.add(one);
+					scorePanel.add(two);
+					scorePanel.add(three);
+					scorePanel.add(four);
+					scorePanel.add(five);
 					questionPanel.add(questionLabel);
 					questionPanel.add(scorePanel);
 					catPanel.add(questionPanel);
 				}
+				//Adds category panel to the panel we want to populate the assessment with
 				populatedPanel.add(catPanel);
-				//viewAssessmentPanel.add(populatedPanel);
 			}
-			panel2.add(populatedPanel);
+			//Adds newly created panel to assessment panel.
+			singleAssessmentPanel.add(populatedPanel);
 			
 		}
 	}
-	
-    @SuppressWarnings("deprecation")
-	private void saveState(Assessment assessmentToSave) { 
-    	ArrayList<Category> cats = assessmentToSave.getCategories();
-    	for (Category cat : cats){
-			VerticalPanel catPanel = new VerticalPanel();
-			ArrayList<Question> Qs = cat.getQuestions();
-			Label catLabel = new Label(cat.getName());
-			catLabel.addStyleName("label");
-			catPanel.add(catLabel);
-			for (Question q : Qs){
-				for (RadioButton b : buttons) { 
-					if (b.isChecked() && q.getBodyText() == b.getName()) { 
-						q.setScore(Integer.parseInt(b.getText()));
-						
-					}
-				} 
-			} 
-    	}
-    
-	}
+
+	//Initialize method to display info in each student panel
 	private void initGUI() {
 		this.add(new Label("Year in program: " + stud.getClassYear()));
 		this.add(new Button("Delete this student"));
 		this.add(new Label("Current Assessments: "));
+		//Loop to add button and click handler to navigate to each assessment
 		for (Assessment a : assessments){
 			HorizontalPanel assessmentViewPanel = new HorizontalPanel();
 			assessmentViewPanel.add(new Label(a.getName() + " -- Status: " + a.getStatus()));
