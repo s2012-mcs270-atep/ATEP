@@ -10,8 +10,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import com.google.gwt.user.client.ui.Label;
-
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 public class Assessment implements Serializable {
 	@SuppressWarnings("unused")

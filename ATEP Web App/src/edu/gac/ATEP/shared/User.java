@@ -10,8 +10,6 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-import edu.gac.ATEP.shared.Student;
-
 @PersistenceCapable(identityType=IdentityType.APPLICATION)
 @Discriminator(strategy=DiscriminatorStrategy.CLASS_NAME)
 public class User implements Serializable {

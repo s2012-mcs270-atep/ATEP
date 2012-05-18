@@ -109,7 +109,6 @@ public class StudentPanel extends VerticalPanel{
 	//Initialize method to display info in each student panel
 	private void initGUI() {
 		this.add(new Label("Year in program: " + stud.getClassYear()));
-		this.add(new Button("Delete this student"));
 		this.add(new Label("Current Assessments: "));
 		//Loop to add button and click handler to navigate to each assessment
 		for (Assessment a : assessments){

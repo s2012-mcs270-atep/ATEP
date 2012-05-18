@@ -32,7 +32,7 @@ import com.google.gwt.user.client.ui.HasHorizontalAlignment;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class ATEP_Web_App implements EntryPoint {
-	//Assessmentstore and Studentstore are declared below as they would need to be used for persistence. 
+//Assessmentstore and Studentstore are declared below as they would need to be used for persistence. 
 //	private final AssessmentTempStoreAsync assessmentTempStore = GWT.create(AssessmentTempStore.class);
 //	private final StudentStoreAsync studentStore = GWT.create(StudentStore.class);
 	
@@ -44,6 +44,8 @@ public class ATEP_Web_App implements EntryPoint {
 	private VerticalPanel assessmentPanel;
 	private VerticalPanel addStudentPanel;
 	private VerticalPanel removeStudentPanel;
+	private VerticalPanel addAssessmentTemplatePanel;
+	private VerticalPanel removeAssessmentTemplatePanel;
 //	private Long nextID = 1L; //TODO change if appropriate
 	
 //	private Label updatingLabel;
@@ -63,16 +65,19 @@ public class ATEP_Web_App implements EntryPoint {
 	public void onModuleLoad() {
 		final Label errorLabel = new Label();
 		errorLabel.addStyleName("error");
-		//final Button viewButton = new Button("View");	
 		final Button addStudentButton = new Button("Add New Student");
+		final Button addStudentToListButton = new Button("Add Student");
 		final Button removeStudentButton = new Button("Remove Student");
 		final Button addAssessmentTemplateButton = new Button("Add New Assessment Template");
 		final Button removeAssessmentTemplateButton = new Button("Remove Assessment Template");
 		final Button studListButton = new Button("Student List");
 		final Button removeTheseStudentsButton = new Button("Remove (these) Student(s)");
+		final Button addTemplateButton = new Button("Add Template");
+		final Button removeTheseAssessmentTemplatesButton = new Button("Remove (these) Assessment Template(s)");
 		
 		//STUFF FOR TESTING
-		ArrayList<Student> studentList = new ArrayList<Student>();
+		final ArrayList<Student> studentList = new ArrayList<Student>();
+		ArrayList<AssessmentTemplate> templateList = new ArrayList<AssessmentTemplate>();
 		
 		//Create Sample Assessment Templates
 		ArrayList<Category> categoriesBones = new ArrayList<Category>();
@@ -82,14 +87,18 @@ public class ATEP_Web_App implements EntryPoint {
 		Question bones1 = new Question("How come bones?");
 		questionsBones.add(bones1);
 		categoriesBones.add(bones);
+		templateList.add(bonesTemplate);
 		
 		ArrayList<Category> categoriesFace = new ArrayList<Category>();
 		ArrayList<Question> questionsFace = new ArrayList<Question>();
 		AssessmentTemplate faceTemplate = new AssessmentTemplate("Face Assessment", categoriesFace, 3);
 		Category face = new Category("Face", questionsFace);
 		Question questionC1 = new Question("What's wrong with your face?");
+		Question questionC2 = new Question("How many noses are on a normal face?");
 		questionsFace.add(questionC1);
+		questionsFace.add(questionC2);
 		categoriesFace.add(face);
+		templateList.add(faceTemplate);
 		
 		//Create Sample Students
 		Student harry = new Student("Harry", 2);
@@ -104,12 +113,15 @@ public class ATEP_Web_App implements EntryPoint {
 		mainPanel = new VerticalPanel();
 		mainPanel.add(errorLabel);
 		
+		// Create assessment panel to hold assessment data
 		assessmentPanel = new VerticalPanel();
 		assessmentPanel.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
 		
+		// Create admin panel to hold the menu panel containing administrative tools
 		adminPanel = new VerticalPanel();
 		adminPanel.add(new Label("Administrator Menu"));
 		
+		// Create menu panel to hold all of the buttons for administrative use only
 		menuPanel = new HorizontalPanel();
 		menuPanel.add(addStudentButton);
 		menuPanel.add(removeStudentButton);
@@ -118,13 +130,18 @@ public class ATEP_Web_App implements EntryPoint {
 		menuPanel.add(studListButton);
 		adminPanel.add(menuPanel);
 		
+		// Create add student panel to display the tools for adding a new student
 		addStudentPanel = new VerticalPanel();
 		Label addStudentLabel = new Label("Enter the Gustavus email address of the student you would like to add: ");
 		addStudentPanel.add(addStudentLabel);
-		TextBox textBox = new TextBox();
-		addStudentPanel.add(textBox);
-		textBox.setWidth("211px");
+		HorizontalPanel sendStudentPanel = new HorizontalPanel();
+		final TextBox studentName = new TextBox();
+		sendStudentPanel.add(studentName);
+		sendStudentPanel.add(addStudentToListButton);
+		studentName.setWidth("211px");
+		addStudentPanel.add(sendStudentPanel);
 		
+		// Create remove student panel to display a list of all students for administrator to choose which ones to remove
 		removeStudentPanel = new VerticalPanel();
 		Label removeStudentLabel = new Label("Please select the student(s) from the list that you would like to remove: ");
 		removeStudentPanel.add(removeStudentLabel);
@@ -134,6 +151,28 @@ public class ATEP_Web_App implements EntryPoint {
 			removeStudentPanel.add(studentToRemove);
 		}
 		removeStudentPanel.add(removeTheseStudentsButton);
+		
+		// Create add assessment template panel to display the tools for adding a new assessment template
+		addAssessmentTemplatePanel = new VerticalPanel();
+		Label addAssessmentTemplateLabel = new Label("Enter the name of the new Assessment Template you would like to add: ");
+		addAssessmentTemplatePanel.add(addAssessmentTemplateLabel);
+		HorizontalPanel sendTemplatePanel = new HorizontalPanel();
+		final TextBox templateName = new TextBox();
+		sendTemplatePanel.add(templateName);
+		sendTemplatePanel.add(addTemplateButton);
+		templateName.setWidth("211px");
+		addAssessmentTemplatePanel.add(sendTemplatePanel);
+		
+		// Create remove assessment template panel to display a list of all assessment templates for administrator to choose which ones to remove
+		removeAssessmentTemplatePanel = new VerticalPanel();
+		Label removeAssessmentTemplateLabel = new Label("Please select the Assessment Template(s) from the list that you would like to remove: ");
+		removeAssessmentTemplatePanel.add(removeAssessmentTemplateLabel);
+		for(AssessmentTemplate t : templateList){
+			HorizontalPanel templateToRemove = new HorizontalPanel();
+			templateToRemove.add(new CheckBox(t.getName()));
+			removeAssessmentTemplatePanel.add(templateToRemove);
+		}
+		removeAssessmentTemplatePanel.add(removeTheseAssessmentTemplatesButton);
 		
 		
 	//Status Panel allows the user to see when problems occur when using persistence. 
@@ -162,20 +201,23 @@ public class ATEP_Web_App implements EntryPoint {
 				assessmentPanel.setVisible(false);
 				addStudentPanel.setVisible(false);
 				removeStudentPanel.setVisible(false);
+				addAssessmentTemplatePanel.setVisible(false);
+				removeAssessmentTemplatePanel.setVisible(false);
 			}
 		}
 		studListHandler goBack = new studListHandler();
 		studListButton.addClickHandler(goBack);
 		
-
 		class addStudentHandler implements ClickHandler {
-			//fired when the user clicks on the studListButton.
+			//fired when the user clicks on the addStudentButton.
 			public void onClick(ClickEvent event){
 				mainPanel.setVisible(false);
 				adminPanel.setVisible(true);
 				assessmentPanel.setVisible(false);
 				addStudentPanel.setVisible(true);
 				removeStudentPanel.setVisible(false);
+				addAssessmentTemplatePanel.setVisible(false);
+				removeAssessmentTemplatePanel.setVisible(false);
 			}
 		}
 		addStudentHandler addStud = new addStudentHandler();
@@ -183,19 +225,51 @@ public class ATEP_Web_App implements EntryPoint {
 		
 
 		class removeStudentHandler implements ClickHandler {
-			//fired when the user clicks on the studListButton.
+			//fired when the user clicks on the removeStudentButton.
 			public void onClick(ClickEvent event){
 				mainPanel.setVisible(false);
 				adminPanel.setVisible(true);
 				assessmentPanel.setVisible(false);
 				addStudentPanel.setVisible(false);
 				removeStudentPanel.setVisible(true);
+				addAssessmentTemplatePanel.setVisible(false);
+				removeAssessmentTemplatePanel.setVisible(false);
 			}
 		}
 		removeStudentHandler removeStudent = new removeStudentHandler();
 		removeStudentButton.addClickHandler(removeStudent);
-
-		// Add the mainPanel to the RootPanel
+		
+		class addAssessmentTemplateHandler implements ClickHandler {
+			//fired when the user clicks on the addStudentButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(false);
+				addAssessmentTemplatePanel.setVisible(true);
+				removeAssessmentTemplatePanel.setVisible(false);
+			}
+		}
+		addAssessmentTemplateHandler addTemp = new addAssessmentTemplateHandler();
+		addAssessmentTemplateButton.addClickHandler(addTemp);
+		
+		class removeAssessmentTemplateHandler implements ClickHandler {
+			//fired when the user clicks on the removeStudentButton.
+			public void onClick(ClickEvent event){
+				mainPanel.setVisible(false);
+				adminPanel.setVisible(true);
+				assessmentPanel.setVisible(false);
+				addStudentPanel.setVisible(false);
+				removeStudentPanel.setVisible(false);
+				addAssessmentTemplatePanel.setVisible(false);
+				removeAssessmentTemplatePanel.setVisible(true);
+			}
+		}
+		removeAssessmentTemplateHandler removeTemplate = new removeAssessmentTemplateHandler();
+		removeAssessmentTemplateButton.addClickHandler(removeTemplate);
+		
+		// Add the mainPanel, adminPanel, assessmentPanel, addStudentPanel, and removeStudentPanel to the RootPanel
 		// Use RootPanel.get() to get the entire body element
 		RootPanel rootPanel = RootPanel.get("applicationContainer");
 		rootPanel.add(adminPanel);
@@ -203,15 +277,23 @@ public class ATEP_Web_App implements EntryPoint {
 		rootPanel.add(assessmentPanel);
 		rootPanel.add(addStudentPanel);
 		rootPanel.add(removeStudentPanel);
+		rootPanel.add(addAssessmentTemplatePanel);
+		rootPanel.add(removeAssessmentTemplatePanel);
 		mainPanel.setSize("775px", "151px");
 		assessmentPanel.setSize("775px", "18px");
 		addStudentPanel.setSize("775px", "18px");
 		removeStudentPanel.setSize("775px", "18px");
+		addAssessmentTemplatePanel.setSize("775px", "18px");
+		removeAssessmentTemplatePanel.setSize("775px", "18px");
 
+		// Set initial visibility of panels when first entering application
+		mainPanel.setVisible(true);
 		assessmentPanel.setVisible(false);
 		adminPanel.setVisible(true);
 		addStudentPanel.setVisible(false);
 		removeStudentPanel.setVisible(false);
+		addAssessmentTemplatePanel.setVisible(false);
+		removeAssessmentTemplatePanel.setVisible(false);
 		
 		//Add rest of panel structure
 		mainPanel.add(new Label("Search Students"));
